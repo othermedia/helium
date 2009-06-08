@@ -9,6 +9,7 @@ class TomDeployer
   CONFIG_FILE = 'deploy.yml'
   REPOS       = 'repos'
   STATIC      = 'static'
+  GIT         = '.git'
   
   def initialize(path)
     @path = path
@@ -49,6 +50,7 @@ class TomDeployer
     puts "Exporting #{project}:#{remote} into #{target}"
     cd(repo_dir) { `git checkout #{remote}` }
     cp_r(repo_dir, target)
+    rm_rf(join(target, GIT))
   end
   
   def join(*args)
