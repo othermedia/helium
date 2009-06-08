@@ -1,8 +1,15 @@
 require "test/unit"
 require "tom_deployer"
+require "fileutils"
+
+ROOT = File.expand_path(File.dirname(__FILE__))
 
 class TestTomDeployer < Test::Unit::TestCase
-  def test_sanity
-    flunk "write tests or I will kneecap you"
+  def setup
+    FileUtils.rm_rf(ROOT + '/output')
+  end
+  
+  def test_build
+    TomDeployer.new(ROOT).run!('output')
   end
 end

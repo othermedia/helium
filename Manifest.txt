@@ -2,6 +2,6 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
-bin/tom_deployer
 lib/tom_deployer.rb
 test/test_tom_deployer.rb
+test/deploy.yml
