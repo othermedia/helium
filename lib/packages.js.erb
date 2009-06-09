@@ -1,14 +1,28 @@
 JS.Packages(function() { with(this) {
-    var PATH = __FILE__();
+    var PATH = __FILE__().replace(/\/[^\/]*$/g, '');
     
-<% @deps.each do |path, config|
-  path = path.gsub(dir, '')
-  prov = config[:provides] || []
-  req  = config[:requires] || []
+    var branches = {};
+    
+    JS.setBranch = function(pakage, branch) {
+        branches[pakage] = branch;
+    };
+    
+    var getBranch = function(prefix) {
+        var project = prefix.replace(/\//g, '');
+        return '/' + (branches[project] || 'master');
+    };
+    
+<% @tree.each_child do |prefix, tree|
+  master = tree.traverse(['/master'])
+  master.each_child do |path, config|
+    prov = config.value[:provides] || []
+    req  = config.value[:requires] || []
 %>
-    file(PATH + "<%= path %>")
-        .provides(<%= prov.map { |p| p.inspect } * ', ' %>)
+    loader(function(cb) {
+        load("<%= prefix %>" + getBranch(prefix) + "<%= path %>", cb);
+    })  .provides(<%= prov.map { |p| p.inspect } * ', ' %>)
         .requires(<%= req.map { |p| p.inspect } * ', ' %>);
-<% end %>
+<% end
+end %>
 }});
 

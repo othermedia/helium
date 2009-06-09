@@ -3,6 +3,7 @@ Manifest.txt
 README.txt
 Rakefile
 lib/tom_deployer.rb
+lib/trie.rb
 lib/packages.js.erb
 test/test_tom_deployer.rb
 test/deploy.yml

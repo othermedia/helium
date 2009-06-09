@@ -16,6 +16,8 @@ class TomDeployer
   PACKAGES    = 'packages.js'
   GIT         = '.git'
   
+  require File.join(ROOT, 'trie')
+  
   def initialize(path)
     @path = File.expand_path(path)
     @config = join(path, CONFIG_FILE)
@@ -51,6 +53,15 @@ class TomDeployer
   end
   
   def generate_config!(dir)
+    @tree = Trie.new
+    
+    @deps.each do |path, config|
+      path  = path.gsub(dir, '').gsub(/\/(\.\/)*/, '/')
+      parts = path.scan(/\/[^\/]+/)
+      key   = parts[0..1] + [parts[2..-1] * '']
+      @tree[key] = config
+    end
+    
     File.open(join(dir, PACKAGES), 'w') do |f|
       template = File.read(join(ROOT, 'packages.js.erb'))
       packages = ERB.new(template).result(binding)
