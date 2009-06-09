@@ -1,0 +1,14 @@
+JS.Packages(function() { with(this) {
+    var PATH = __FILE__();
+    
+<% @deps.each do |path, config|
+  path = path.gsub(dir, '')
+  prov = config[:provides] || []
+  req  = config[:requires] || []
+%>
+    file(PATH + "<%= path %>")
+        .provides(<%= prov.map { |p| p.inspect } * ', ' %>)
+        .requires(<%= req.map { |p| p.inspect } * ', ' %>);
+<% end %>
+}});
+

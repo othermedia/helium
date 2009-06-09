@@ -2,7 +2,7 @@ require "test/unit"
 require "tom_deployer"
 require "fileutils"
 
-ROOT = File.expand_path(File.dirname(__FILE__))
+ROOT = File.dirname(__FILE__)
 
 class TestTomDeployer < Test::Unit::TestCase
   def setup
