@@ -1,28 +1,34 @@
 JS.Packages(function() { with(this) {
-    var PATH = __FILE__().replace(/\/[^\/]*$/g, '');
+    var BRANCHES = {}, current, pathname;
     
-    var branches = {};
+<% @tree.each_child do |project, branches| %>
+    BRANCHES['<%= project %>'] = {};
+<% branches.each_child do |branch, files| %>
+    current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
+<% files.each do |path, config| %>
+    pathname = current['/<%= path * '/' %>'] = {};
+    pathname.provides = <%= config[:provides].inspect %>;
+    pathname.requires = <%= config[:requires].inspect %>;
+<% end %>
+<% end %>
+<% end %>
     
-    JS.setBranch = function(pakage, branch) {
-        branches[pakage] = branch;
+    window.JS_CONFIG = window.JS_CONFIG || {};
+    
+    JS_CONFIG.use = function(project, branch) {
+        if (!this.PATH) throw 'Please set JS_CONFIG.PATH before specifying branches';
+        
+        var pkg = BRANCHES[project][branch],
+            path, config, builder;
+        
+        for (path in pkg) {
+            if (!pkg.hasOwnProperty(path)) continue;
+            
+            config  = pkg[path];
+            builder = file([this.PATH, project, branch].join('/') + path);
+            builder.provides.apply(builder, config.provides);
+            builder.requires.apply(builder, config.requires);
+        }
     };
-    
-    var getBranch = function(prefix) {
-        var project = prefix.replace(/\//g, '');
-        return '/' + (branches[project] || 'master');
-    };
-    
-<% @tree.each_child do |prefix, tree|
-  master = tree.traverse(['/master'])
-  master.each_child do |path, config|
-    prov = config.value[:provides] || []
-    req  = config.value[:requires] || []
-%>
-    loader(function(cb) {
-        load("<%= prefix %>" + getBranch(prefix) + "<%= path %>", cb);
-    })  .provides(<%= prov.map { |p| p.inspect } * ', ' %>)
-        .requires(<%= req.map { |p| p.inspect } * ', ' %>);
-<% end
-end %>
 }});
 
