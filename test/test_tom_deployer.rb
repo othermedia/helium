@@ -10,6 +10,12 @@ class TestTomDeployer < Test::Unit::TestCase
   end
   
   def test_build
-    TomDeployer.new(ROOT).run!('output')
+    deploy = TomDeployer.new(ROOT, 'output')
+    deploy.add_observer(self)
+    deploy.run!
+  end
+  
+  def update(type, message)
+    puts "**** [LOG] #{ message }"
   end
 end

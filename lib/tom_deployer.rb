@@ -1,12 +1,18 @@
-require 'rubygems'
+require 'observer'
+require 'erb'
 require 'yaml'
+require 'fileutils'
+require 'find'
+
+require 'rubygems'
 require 'grit'
 require 'jake'
 require 'packr'
 require 'oyster'
-require 'erb'
 
 class TomDeployer
+  include Observable
+  
   VERSION = '0.1.0'
   
   ROOT        = File.dirname(__FILE__)
@@ -15,89 +21,109 @@ class TomDeployer
   STATIC      = 'static'
   PACKAGES    = 'packages.js'
   GIT         = '.git'
+  HEAD        = 'HEAD'
+  JAKE_FILE   = 'jake.yml'
+  
+  SEP  = File::SEPARATOR
+  BYTE = 1024.0
   
   require File.join(ROOT, 'trie')
   
-  def initialize(path)
-    @path = File.expand_path(path)
-    @config = join(path, CONFIG_FILE)
+  def initialize(path, output_dir = 'output')
+    @path       = File.expand_path(path)
+    @config     = join(@path, CONFIG_FILE)
     raise "Expected config file at #{@config}" unless File.file?(@config)
-    @config = YAML.load(File.read(@config))
-    
-    Jake.clear_hooks!
-    
-    @deps = {}
-    jake_hook :file_created do |package, build, path|
-      @deps[path] = package.meta if build == :min
-    end
+    @config     = YAML.load(File.read(@config))
+    @output_dir = join(@path, output_dir)
   end
   
-  def run!(output_dir = 'output')
-    output_dir = join(@path, output_dir)
-    
-    mkdir_p(output_dir)
-    mkdir_p(join(output_dir, REPOS))
-    mkdir_p(join(output_dir, STATIC))
-    
-    @config.each do |name, url|
-      repo_dir = join(output_dir, REPOS, name)
-      checkout(url, repo_dir)
-      
-      repo = Grit::Repo.new(repo_dir)
-      branches = repo.remotes + repo.tags
-      
-      branches.each do |branch|
-        export(name, repo_dir, branch.name, join(output_dir, STATIC))
-      end
-    end
-    
-    generate_config!(join(output_dir, STATIC))
+  def run!(project = nil)
+    return deploy!(project) if project
+    @config.each { |project, url| deploy!(project, false) }
+    run_builds!
   end
   
-  def generate_config!(dir)
-    @tree = Trie.new
-    
-    @deps.each do |path, config|
-      path  = path.gsub(dir, '').gsub(/\/(\.\/)*/, '/')
-      parts = path.scan(/[^\/]+/)
-      key   = parts[0..1] + [parts[2..-1] * '/']
-      @tree[key] = config
-    end
-    
-    File.open(join(dir, PACKAGES), 'w') do |f|
-      template = File.read(join(ROOT, 'packages.js.erb'))
-      packages = ERB.new(template).result(binding)
-      packed   = Packr.pack(packages, :shrink_vars => true)
-      f.write(packages)
-    end
+  def deploy!(project, build = true)
+    checkout(project)
+    export(project)
+    run_builds! if build
   end
   
-  def checkout(url, dir)
-    puts "Checking out #{url} into #{dir}"
-    if File.directory?(dir)
+  def checkout(project)
+    dir = repo_dir(project)
+    if File.directory?(join(dir, GIT))
+      log :git_fetch, "Updating Git repo in #{ dir }"
       cd(dir) { `git fetch origin` }
     else
-      `git clone #{url} #{dir}`
+      url = @config[project]
+      log :git_clone, "Cloning Git repo #{ url } into #{ dir }"
+      `git clone #{ url } #{ dir }`
     end
   end
   
-  def export(project, repo_dir, remote, static_dir)
-    branch = remote.split('/').last
-    target = join(static_dir, project, branch)
+  def export(project)
+    repo_dir = repo_dir(project)
+    repo     = Grit::Repo.new(repo_dir)
+    branches = repo.remotes + repo.tags
     
-    rm_rf(target) if File.directory?(target)
-    mkdir_p(join(static_dir, project))
+    mkdir_p(static_dir(project))
     
-    puts "Exporting #{project}:#{remote} into #{target}"
-    
-    cd(repo_dir) { `git checkout #{remote}` }
-    cp_r(repo_dir, target)
-    rm_rf(join(target, GIT))
-    
-    Jake.build!(target) if File.file?(join(target, 'jake.yml'))
+    branches.each do |branch|
+      name   = branch.name.split(SEP).last
+      next if HEAD == name
+      
+      target = static_dir(project, name)
+      
+      log :export, "Exporting branch '#{ name }' of '#{ project }' into #{ target }"
+      rm_rf(target) if File.directory?(target)
+      cd(repo_dir) { `git checkout #{ branch.name }` }
+      cp_r(repo_dir, target)
+      rm_rf(join(target, GIT))
+    end
   end
   
+  def run_builds!
+    @tree = Trie.new
+    Find.find(static_dir) do |path|
+      next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
+      project, branch = *path.split(SEP)[-2..-1]
+      
+      Jake.clear_hooks!
+      
+      jake_hook :file_created do |package, build, file|
+        if build == :min
+          file = file.gsub(/\/(\.?\/)*/, SEP).gsub(path, '')
+          key = [project, branch, file]
+          @tree[key] = package.meta
+        end
+      end
+      
+      log :jake_build, "Building branch '#{ branch }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
+      Jake.build!(path)
+    end
+    
+    File.open(static_dir(PACKAGES), 'w') do |f|
+      template = File.read(join(ROOT, 'packages.js.erb'))
+      code     = ERB.new(template).result(binding)
+      f.write(code)
+    end
+  end
+    
 private
+  
+  def repo_dir(project)
+    join(@output_dir, REPOS, project)
+  end
+  
+  def static_dir(project = nil, branch = nil)
+    path = [@output_dir, STATIC, project, branch].compact
+    join(*path)
+  end
+  
+  def log(*args)
+    changed(true)
+    notify_observers(*args)
+  end
   
   def join(*args)
     File.join(*args)

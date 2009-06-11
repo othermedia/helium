@@ -7,7 +7,7 @@ JS.Packages(function() { with(this) {
     current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| %>
 <% next unless config[:provides] %>
-    pathname = current['/<%= path * '/' %>'] = {};
+    pathname = current['<%= path * '/' %>'] = {};
     pathname.p = <%= (config[:provides] || []).inspect %>;
     pathname.r = <%= (config[:requires] || []).inspect %>;
 <% end %>
