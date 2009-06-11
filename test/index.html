@@ -4,25 +4,12 @@
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>Package loader test</title>
+  
   <script src="http://jsclass.jcoglan.com/javascripts/js.class/loader.js" type="text/javascript"></script>
   <script src="/test/output/static/packages.js" type="text/javascript"></script>
+  
+  <script src="/test/ojay-conf.js" type="text/javascript"></script>
   <script type="text/javascript" language="javascript" charset="utf-8">
-    JS.Packages(function() { with(this) {
-        
-        file('http://cdn.othermedia.com/ojay/0.4.0/core-min.js')
-            .provides("Ojay", "Ojay.HTML")
-            .requires('YAHOO', 'JS.Class', 'JS.MethodChain', 'JS.Observable', 'JS.State');
-        
-        file('http://cdn.othermedia.com/ojay/0.4.0/pkg/overlay-min.js')
-            .provides("Ojay.ContentOverlay")
-            .requires('Ojay');
-        
-        file('http://cdn.othermedia.com/ojay-yui/2.7.0.js')
-            .provides('YAHOO');
-    }});
-    
-    
-    //================================
     
     JS_CONFIG.PATH = '/test/output/static';
     JS_CONFIG.use('panel', 'master');
