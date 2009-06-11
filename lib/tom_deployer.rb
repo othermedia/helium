@@ -44,8 +44,10 @@ class TomDeployer
       checkout(url, repo_dir)
       
       repo = Grit::Repo.new(repo_dir)
-      repo.remotes.each do |remote|
-        export(name, repo_dir, remote.name, join(output_dir, STATIC))
+      branches = repo.remotes + repo.tags
+      
+      branches.each do |branch|
+        export(name, repo_dir, branch.name, join(output_dir, STATIC))
       end
     end
     
@@ -58,7 +60,7 @@ class TomDeployer
     @deps.each do |path, config|
       path  = path.gsub(dir, '').gsub(/\/(\.\/)*/, '/')
       parts = path.scan(/[^\/]+/)
-      key   = parts[0..1] + [parts[2..-1] * '']
+      key   = parts[0..1] + [parts[2..-1] * '/']
       @tree[key] = config
     end
     

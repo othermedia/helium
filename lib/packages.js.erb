@@ -6,9 +6,10 @@ JS.Packages(function() { with(this) {
 <% branches.each_child do |branch, files| %>
     current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| %>
+<% next unless config[:provides] %>
     pathname = current['/<%= path * '/' %>'] = {};
-    pathname.provides = <%= (config[:provides] || []).inspect %>;
-    pathname.requires = <%= (config[:requires] || []).inspect %>;
+    pathname.p = <%= (config[:provides] || []).inspect %>;
+    pathname.r = <%= (config[:requires] || []).inspect %>;
 <% end %>
 <% end %>
 <% end %>
@@ -26,8 +27,8 @@ JS.Packages(function() { with(this) {
             
             config  = pkg[path];
             builder = file([this.PATH, project, branch].join('/') + path);
-            builder.provides.apply(builder, config.provides);
-            builder.requires.apply(builder, config.requires);
+            builder.provides.apply(builder, config.p);
+            builder.requires.apply(builder, config.r);
         }
     };
 }});
