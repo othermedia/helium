@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>theOTHERmedia JavaScript deploy system</title>
+  
+</head>
+<body>
+  
+  <h1>JavaScript deploy system</h1>
+  
+  <form action="/deploy" method="post">
+    <select name="project">
+      <option value="ALL"></option>
+      <% @projects.keys.sort.each do |name| %>
+      <option value="<%= name %>"><%= name %> [<%= @projects[name] %>]</option>
+      <% end %>
+    </select>
+    <input type="submit" value="Deploy">
+  </form>
+  
+  <% if @log %>
+  <ul>
+  <% @log.each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+  </ul>
+  <% end %>
+  
+</body>
+</html>
+

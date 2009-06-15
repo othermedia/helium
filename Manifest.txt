@@ -5,5 +5,10 @@ Rakefile
 lib/tom_deployer.rb
 lib/trie.rb
 lib/packages.js.erb
+web/config.ru
+web/app.rb
+web/views/index.erb
 test/test_tom_deployer.rb
 test/deploy.yml
+test/index.html
+test/ojay-conf.js

@@ -1,1 +1,3 @@
+web/lib
+web/deploy.yml
 test/output
