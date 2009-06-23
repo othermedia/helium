@@ -22,7 +22,7 @@ class TomDeployer
   PACKAGES    = 'packages.js'
   GIT         = '.git'
   HEAD        = 'HEAD'
-  JAKE_FILE   = 'jake.yml'
+  JAKE_FILE   = Jake::CONFIG_FILE
   
   SEP  = File::SEPARATOR
   BYTE = 1024.0

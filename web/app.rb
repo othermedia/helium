@@ -8,7 +8,7 @@ require File.join(ROOT_DIR, '..', 'lib', 'tom_deployer')
 LIB_DIR  = 'lib'
 CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
 
-def projects
+def project_config
   YAML.load(File.read(CONFIG))
 end
 
@@ -18,15 +18,16 @@ get '/' do
 end
 
 post '/deploy' do
-  project  = params[:project]
   deployer = TomDeployer.new(ROOT_DIR, LIB_DIR)
   logger   = Logger.new
   deployer.add_observer(logger)
   
-  project = nil if project == 'ALL'
-  deployer.run!(project)
+  params[:projects].each do |name, value|
+    next unless value == '1'
+    deployer.run!(name)
+  end
   
-  @projects = projects
+  @projects = project_config
   @log = logger.messages
   erb :index
 end

@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <title>theOTHERmedia JavaScript deploy system</title>
+  <link rel="stylesheet" href="/style.css" type="text/css" media="screen">
+</head>
+<body>
+<div class="container">
+
+  <h1><a href="http://othermedia.com">theOTHERmedia</a>
+     <span>JavaScript deploy system</span></h1>
+  
+  <div class="sidebar">
+    
+    <form action="/deploy" method="post">
+      <% @projects.keys.sort.each_with_index do |name, i| %>
+        <div class="project">
+          <input type="hidden" name="projects[<%= name %>]" value="0">
+          <input type="checkbox" class="checkbox" name="projects[<%= name %>]" id="projects_<%= name %>" value="1">
+          <label for="projects_<%= name %>"><%= name %></label>
+        </div>
+      <% end %>
+      <input type="submit" value="Deploy">
+    </form>
+  </div>
+  
+  <div class="main">
+    <%= yield %>
+  </div>
+  
+  <div class="footer">
+    &copy; 2009 theOTHERmedia. JavaScript projects and this application are
+      <a href="http://github.com/othermedia">hosted on GitHub</a>.
+  </div>
+
+</div>
+</body>
+</html>
+
