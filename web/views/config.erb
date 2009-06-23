@@ -1,0 +1,9 @@
+<% if @error %>
+  <p class="error"><%= @error %></p>
+<% end %>
+
+<form action="/config" method="post">
+  <textarea name="yaml"><%= @yaml %></textarea>
+  <input type="submit" value="Save">
+</form>
+

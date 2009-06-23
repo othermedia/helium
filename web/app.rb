@@ -9,14 +9,18 @@ LIB_DIR  = 'lib'
 CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
 
 def project_config
-  YAML.load(File.read(CONFIG))
+  File.file?(CONFIG) ? YAML.load(File.read(CONFIG)) : {}
 end
 
+## GET /
+##
 get '/' do
-  @projects = projects
+  @projects = project_config
   erb :index
 end
 
+## POST /deploy
+##
 post '/deploy' do
   deployer = TomDeployer.new(ROOT_DIR, LIB_DIR)
   logger   = Logger.new
@@ -30,6 +34,28 @@ post '/deploy' do
   @projects = project_config
   @log = logger.messages
   erb :index
+end
+
+## GET /config
+##
+get '/config' do
+  @projects = project_config
+  @yaml = File.file?(CONFIG) ? File.read(CONFIG) : ''
+  erb :config
+end
+
+## POST /config
+##
+post '/config' do
+  @yaml = params[:yaml]
+  begin
+    YAML.load(@yaml)
+    File.open(CONFIG, 'w') { |f| f.write(@yaml) }
+  rescue
+    @error = 'File not saved: invalid YAML'
+  end
+  @projects = project_config
+  erb :config
 end
 
 class Logger
