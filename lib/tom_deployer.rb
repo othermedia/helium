@@ -90,8 +90,8 @@ class TomDeployer
       
       Jake.clear_hooks!
       
-      jake_hook :file_created do |package, build, file|
-        if build == :min
+      jake_hook :file_created do |build, package, build_type, file|
+        if build_type == :min
           file = file.gsub(/\/(\.?\/)*/, SEP).gsub(path, '')
           key = [project, branch, file]
           @tree[key] = package.meta

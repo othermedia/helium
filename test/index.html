@@ -14,11 +14,12 @@
     .close-button { position: absolute; top: 8px; right: 8px; font: bold 12px Helvetic, Arial, sans-serif; cursor: pointer; text-transform: uppercase; }
   </style>
   
-  <script src="/test/ojay-conf.js" type="text/javascript"></script>
+  <script src="/test/yui-conf.js" type="text/javascript"></script>
   <script type="text/javascript" language="javascript" charset="utf-8">
     
     JS_CONFIG.PATH = '/test/output/static';
     JS_CONFIG.use('panel', 'master');
+    JS_CONFIG.use('ojay', '0.4.1');
     
     require('PanelOverlay', function() {
         var overlay = new PanelOverlay({width: 300, height: 200});
