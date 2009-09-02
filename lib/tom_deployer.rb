@@ -17,6 +17,7 @@ class TomDeployer
   
   ROOT        = File.dirname(__FILE__)
   CONFIG_FILE = 'deploy.yml'
+  JS_CONFIG_TEMPLATE = 'packages.js.erb'
   REPOS       = 'repos'
   STATIC      = 'static'
   PACKAGES    = 'packages.js'
@@ -26,6 +27,8 @@ class TomDeployer
   
   SEP  = File::SEPARATOR
   BYTE = 1024.0
+  
+  ERB_TRIM_MODE = '-'
   
   require File.join(ROOT, 'trie')
   
@@ -99,12 +102,16 @@ class TomDeployer
       end
       
       log :jake_build, "Building branch '#{ branch }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
-      Jake.build!(path)
+      
+      begin
+        Jake.build!(path)
+      rescue
+      end
     end
     
     File.open(static_dir(PACKAGES), 'w') do |f|
-      template = File.read(join(ROOT, 'packages.js.erb'))
-      code     = ERB.new(template).result(binding)
+      template = File.read(join(ROOT, JS_CONFIG_TEMPLATE))
+      code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
       f.write(code)
     end
   end

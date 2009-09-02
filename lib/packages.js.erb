@@ -1,18 +1,19 @@
 JS.Packages(function() { with(this) {
     var BRANCHES = {}, current, pathname;
     
-<% @tree.each_child do |project, branches| %>
+<% @tree.each_child do |project, branches| -%>
     BRANCHES['<%= project %>'] = {};
-<% branches.each_child do |branch, files| %>
+<% branches.each_child do |branch, files| -%>
     current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
-<% files.each do |path, config| %>
-<% next unless config[:provides] %>
+<% files.each do |path, config| -%>
+<% next unless config[:provides] -%>
     pathname = current['<%= path * '/' %>'] = {};
     pathname.p = <%= (config[:provides] || []).inspect %>;
     pathname.r = <%= (config[:requires] || []).inspect %>;
-<% end %>
-<% end %>
-<% end %>
+    
+<% end -%>
+<% end -%>
+<% end -%>
     
     window.JS_CONFIG = window.JS_CONFIG || {};
     
