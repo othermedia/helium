@@ -28,8 +28,9 @@ post '/deploy' do
   
   params[:projects].each do |name, value|
     next unless value == '1'
-    deployer.run!(name)
+    deployer.deploy!(name, false)
   end
+  deployer.run_builds!
   
   @projects = project_config
   @log = logger.messages

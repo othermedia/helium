@@ -1,3 +1,4 @@
 web/lib
 web/deploy.yml
+web/public/static
 test/output

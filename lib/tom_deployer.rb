@@ -90,16 +90,17 @@ class TomDeployer
     Find.find(static_dir) do |path|
       next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
       project, branch = *path.split(SEP)[-2..-1]
-      
       Jake.clear_hooks!
       
-      jake_hook :file_created do |build, package, build_type, file|
+      hook = lambda do |build, package, build_type, file|
         if build_type == :min
           file = file.gsub(/\/(\.?\/)*/, SEP).gsub(path, '')
           key = [project, branch, file]
           @tree[key] = package.meta
         end
       end
+      jake_hook(:file_created, &hook)
+      jake_hook(:file_not_changed, &hook)
       
       log :jake_build, "Building branch '#{ branch }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
       
