@@ -1,9 +1,11 @@
+<h2>Edit: <%= @file %></h2>
+
 <% if @error %>
   <p class="error"><%= @error %></p>
 <% end %>
 
-<form action="/config" method="post">
-  <textarea name="yaml"><%= @yaml %></textarea>
+<form action="/<%= @action %>" method="post">
+  <textarea name="contents"><%= @contents %></textarea>
   <input type="submit" value="Save">
 </form>
 

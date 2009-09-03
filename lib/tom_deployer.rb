@@ -85,8 +85,10 @@ class TomDeployer
     end
   end
   
-  def run_builds!
-    @tree = Trie.new
+  def run_builds!(options = {})
+    @tree   = Trie.new
+    @custom = options[:custom]
+    
     Find.find(static_dir) do |path|
       next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
       project, branch = *path.split(SEP)[-2..-1]

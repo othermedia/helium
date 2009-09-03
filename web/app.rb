@@ -7,6 +7,7 @@ require File.join(ROOT_DIR, '..', 'lib', 'tom_deployer')
 
 LIB_DIR  = 'lib'
 CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
+CUSTOM   = File.join(ROOT_DIR, 'loaders.js')
 
 def project_config
   File.file?(CONFIG) ? YAML.load(File.read(CONFIG)) : {}
@@ -30,7 +31,9 @@ post '/deploy' do
     next unless value == '1'
     deployer.deploy!(name, false)
   end
-  deployer.run_builds!
+  
+  custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
+  deployer.run_builds!(:custom => custom)
   
   @projects = project_config
   @log = logger.messages
@@ -41,21 +44,46 @@ end
 ##
 get '/config' do
   @projects = project_config
-  @yaml = File.file?(CONFIG) ? File.read(CONFIG) : ''
+  @action   = 'config'
+  @file     = CONFIG
+  @contents = File.file?(@file) ? File.read(@file) : ''
   erb :config
 end
 
 ## POST /config
 ##
 post '/config' do
-  @yaml = params[:yaml]
+  @projects = project_config
+  @action   = 'config'
+  @file     = CONFIG
+  @contents = params[:contents]
   begin
-    YAML.load(@yaml)
-    File.open(CONFIG, 'w') { |f| f.write(@yaml) }
+    YAML.load(@contents)
+    File.open(@file, 'w') { |f| f.write(@contents) }
   rescue
     @error = 'File not saved: invalid YAML'
   end
+  erb :config
+end
+
+## GET /custom
+##
+get '/custom' do
   @projects = project_config
+  @action   = 'custom'
+  @file     = CUSTOM
+  @contents = File.file?(@file) ? File.read(@file) : ''
+  erb :config
+end
+
+## POST /custom
+##
+post '/custom' do
+  @projects = project_config
+  @action   = 'custom'
+  @file     = CUSTOM
+  @contents = params[:contents]
+  File.open(@file, 'w') { |f| f.write(@contents) }
   erb :config
 end
 

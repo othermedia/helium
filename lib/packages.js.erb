@@ -1,36 +1,45 @@
 JS.Packages(function() { with(this) {
-    var BRANCHES = {}, current, pathname;
-    
+
+<% if @custom %>
+/*--- User-defined loader code ---*/
+<%= @custom %>
+/*--------------------------------*/
+<% end %>
+
+var BRANCHES = {}, current, pathname;
+
 <% @tree.each_child do |project, branches| -%>
-    BRANCHES['<%= project %>'] = {};
+BRANCHES['<%= project %>'] = {};
 <% branches.each_child do |branch, files| -%>
-    current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
+current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| -%>
 <% next unless config[:provides] -%>
-    pathname = current['<%= path * '/' %>'] = {};
-    pathname.p = <%= (config[:provides] || []).inspect %>;
-    pathname.r = <%= (config[:requires] || []).inspect %>;
-    
+pathname = current['<%= path * '/' %>'] = {};
+pathname.p = <%= (config[:provides] || []).inspect %>;
+pathname.r = <%= (config[:requires] || []).inspect %>;
+
 <% end -%>
 <% end -%>
 <% end -%>
+
+window.JS_CONFIG = window.JS_CONFIG || {};
+
+JS_CONFIG.use = function(project, branch) {
+    if (!this.PATH) throw 'Please set JS_CONFIG.PATH before specifying branches';
     
-    window.JS_CONFIG = window.JS_CONFIG || {};
+    var pkg = BRANCHES[project][branch],
+        path, config, builder;
     
-    JS_CONFIG.use = function(project, branch) {
-        if (!this.PATH) throw 'Please set JS_CONFIG.PATH before specifying branches';
+    for (path in pkg) {
+        if (!pkg.hasOwnProperty(path)) continue;
         
-        var pkg = BRANCHES[project][branch],
-            path, config, builder;
-        
-        for (path in pkg) {
-            if (!pkg.hasOwnProperty(path)) continue;
-            
-            config  = pkg[path];
-            builder = file([this.PATH, project, branch].join('/') + path);
-            builder.provides.apply(builder, config.p);
-            builder.requires.apply(builder, config.r);
-        }
-    };
+        config  = pkg[path];
+        builder = file([this.PATH, project, branch].join('/') + path);
+        builder.provides.apply(builder, config.p);
+        builder.requires.apply(builder, config.r);
+    }
+};
+
+/*--- end JS.Packages block ---*/
 }});
 

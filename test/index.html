@@ -2,11 +2,12 @@
 
 <html>
 <head>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>Package loader test</title>
   
-  <script src="http://jsclass.jcoglan.com/javascripts/js.class/loader.js" type="text/javascript"></script>
-  <script src="/test/output/static/packages.js" type="text/javascript"></script>
+  <script type="text/javascript">JSCLASS_PATH = 'http://localhost:4567/static/js.class/2.1.x/build/min/';</script>
+  <script src="http://localhost:4567/static/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
+  <script src="http://localhost:4567/static/packages.js" type="text/javascript"></script>
   
   <style type="text/css" media="screen">
     .overlay-container { background: #f2e697; }
@@ -14,10 +15,12 @@
     .close-button { position: absolute; top: 8px; right: 8px; font: bold 12px Helvetic, Arial, sans-serif; cursor: pointer; text-transform: uppercase; }
   </style>
   
-  <script src="/test/yui-conf.js" type="text/javascript"></script>
+  <script src="/yui-conf.js" type="text/javascript"></script>
   <script type="text/javascript" language="javascript" charset="utf-8">
     
-    JS_CONFIG.PATH = '/test/output/static';
+    JS_CONFIG.PATH = 'http://localhost:4567/static';
+    JS_CONFIG.GOOGLE_KEY = 'ABQIAAAArVbgzt5nxAQAZ_iB_77caBQCULP4XOMyhPd8d_NrQQEO8sT8XBTzVWhRwEDkVfNsvzo8bf4ntGV4ZQ';
+    
     JS_CONFIG.use('panel', 'master');
     JS_CONFIG.use('ojay', '0.4.1');
     
@@ -29,6 +32,8 @@
                .center()
                .show('zoom');
     });
+    
+    require('GMap2');
     
   </script>
 </head>
