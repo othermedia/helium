@@ -1,5 +1,6 @@
+README.txt
 web/lib
 web/deploy.yml
 web/loaders.js
-web/public/static
+web/public/js
 test/output

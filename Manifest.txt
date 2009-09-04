@@ -7,8 +7,11 @@ lib/trie.rb
 lib/packages.js.erb
 web/config.ru
 web/app.rb
+web/public/style.css
+web/views/layout.erb
 web/views/index.erb
+web/views/config.erb
 test/test_tom_deployer.rb
 test/deploy.yml
 test/index.html
-test/ojay-conf.js
+test/yui-conf.js

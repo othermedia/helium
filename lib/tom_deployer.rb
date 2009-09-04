@@ -8,7 +8,6 @@ require 'rubygems'
 require 'grit'
 require 'jake'
 require 'packr'
-require 'oyster'
 
 class TomDeployer
   include Observable
