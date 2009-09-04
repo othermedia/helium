@@ -49,7 +49,7 @@ To serve this application, just set up an Apache VHost whose +DocumentRoot+ is t
 <tt>web/public</tt> directory. Passenger should do the rest.
 
 In addition, the Apache user will need read/write access to <tt>web/deploy.yml</tt> and
-<tt>web/loader.js</tt>, which are editable through the web frontend. The application will
+<tt>web/custom.js</tt>, which are editable through the web frontend. The application will
 generate a directory at <tt>web/lib</tt>, which will be used to check out and build
 projects from Git -- Apache will need read/write access to this directory.
 

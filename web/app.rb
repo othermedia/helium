@@ -7,7 +7,7 @@ require File.join(ROOT_DIR, '..', 'lib', 'tom_deployer')
 
 LIB_DIR  = 'lib'
 CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
-CUSTOM   = File.join(ROOT_DIR, 'loaders.js')
+CUSTOM   = File.join(ROOT_DIR, 'custom.js')
 
 def project_config
   File.file?(CONFIG) ? YAML.load(File.read(CONFIG)) : {}
