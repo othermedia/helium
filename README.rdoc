@@ -78,10 +78,148 @@ Then set up a symlink from the live domain to the <tt>web/lib/static</tt> direct
 
   ln -s /path/to/tom_deployer/web/lib/static /path/to/some_public_dir/js
 
-The JavaScript files will then be available under <tt>http://js.othermedia.com/js/</tt>.
+The JavaScript files will then be available under <tt>http://js.othermedia.com/js</tt>.
 Alternatively, use +rsync+ to copy everything in <tt>web/lib/static</tt> to another
 domain. If you want to serve the scripts from the deployment app itself, do this:
 
   cd /path/to/tom_deployer/web/public
   ln -s ../lib/static js
+
+
+== Usage
+
+For the rest of this article, we'll assume the deployment app is running at
+http://jsdeploy.otherworks.com, and the deployed JavaScript files are available under
+http://js.othermedia.com/js, as suggested using the above Apache setup.
+
+=== JavaScript project setup
+
+To deploy a project using this system, two conditions must be fulfilled: the project must
+be hosted in a Git repository, and it must have a <tt>jake.yml</tt> build file in its
+root directory. We use Jake (http://github.com/jcoglan/jake) to build checked-out projects
+and extract dependency data. Even if your project doesn't need a complex build process, it
+must still declare the objects it provides and requires so it can be deployed using the
+package manager. Each package must provide +provides+ and (optionally) +requires+ fields
+in its metadata. For example, here's a <tt>jake.yml</tt> file for the +Panel+ package:
+
+  ---
+  source_directory:   .
+  build_directory:    .
+  layout:             together
+  builds:
+    min:
+      shrink_vars:    true
+      private:        true
+  packages:
+    panel:
+      files:
+        - panel
+      meta:
+        provides:
+          - panel
+          - Panel
+          - PanelOverlay
+        requires:
+          - JS.Class
+          - Ojay
+          - Ojay.HTML
+          - Ojay.ContentOverlay
+
+The project *must* have a build called +min+, and may have other builds. This deployment
+system exports the +min+ build for public use. You may use whatever compression settings
+you like for this build, and the project may contain any number of packages. See Jake
+(http://github.com/jcoglan/jake) for more documentation on these build files.
+
+Note that objects listed under +provides+ and +requires+ should be the runtime reference
+names of JavaScript objects, and anything in the +requires+ list should be provided by
+some other package known to the deploy system.
+
+=== The deployment process
+
+Our deployment system performs the following steps on every project registered:
+
+* Copies its Git repo into <tt>web/lib/repos/{project name}</tt>. If the repo is already
+  present, we use <tt>git fetch</tt> to update it, otherwise we use <tt>git clone</tt>.
+* Exports the head revision of every branch and every tag in the repo into its own
+  directory at <tt>web/lib/static/{project}/{branch}</tt>.
+* Builds every exported copy using Jake, if a <tt>jake.yml</tt> is present. This stage
+  extracts the +provides+ and +requires+ data from the Jake build process, keeping
+  track of which build file provides which JavaScript objects.
+* Generates a file at <tt>web/lib/static/packages.js</tt>, which lists all the files
+  that Jake has built and which objects they provide using the JS.Class package manager
+  API (see http://jsclass.jcoglan.com/packages.html).
+
+=== Using the deployment app
+
+On first accessing http://jsdeploy.otherworks.com, there will be no JavaScript projects
+listed. To add projects, we need to edit a YAML file listing projects and their Git
+URIs. To support the client-side package manager, the deploy system must at least have
+the JS.Class project registered. Projects are listed as key-value pairs by project name
+and Git URI.
+
+Go to http://jsdeploy.otherworks.com/config and enter the following projects:
+
+  ---
+  js.class:   git://github.com/jcoglan/js.class.git
+  ojay:       git@github.com:othermedia/ojay.git
+  panel:      git@github.com:othermedia/panel.git
+
+After clicking 'Save', these projects should be listed in the sidebar. Check all three,
+and hit 'Deploy' to import them all into the deploy system. After a few seconds you should
+see a log output telling you which projects and branches were built. There should also
+now be a JavaScript file at http://js.othermedia.com/js/pacakges.js that lists the files
+available on the server.
+
+=== Client-side package management
+
+The client side of the distribution system is the JS.Class package manager (documented
+at http://jsclass.jcoglan.com/packages.html). This provides a dependency manager and a
+simple way to load JavaScript objects on demand. To set it up, you just need the following
+in the head of your HTML pages:
+
+  <script type="text/javascript">JSCLASS_PATH = 'http://js.othermedia.com/js/js.class/2.1.x/build/min';</script>
+  <script type="text/javascript" src="http://js.othermedia.com/js/js.class/2.1.x/build/min/loader.js"></script>
+  <script type="text/javascript" src="http://js.othermedia.com/js/packages.js"></script>
+  
+  <script type="text/javascript">
+  JS_CONFIG.PATH = 'http://js.othermedia.com/js';
+  JS_CONFIG.use('ojay', '0.4.1');
+  JS_CONFIG.use('panel', 'master');
+  </script>
+
+To explain the above code: we set the special variable +JSCLASS_PATH+ to tell JS.Class where
+it is being hosted; this lets the JS.Class package manager load other parts of the JS.Class
+library. We then load two files: the JS.Class core and package loader (<tt>loader.js</tt>)
+and our package listing generated by the deploy system (<tt>packages.js</tt>). Finally, we
+need to set some configuration variables; <tt>JS_CONFIG.PATH</tt> should be the directory
+from which we're serving deployed script files, and <tt>JS_CONFIG.use()</tt> must be
+called to tell the package manager which projects and which branch of each project we want
+to use.
+
+Note that the above only loads two small scripts -- the <tt>JS_CONFIG.use()</tt> calls do not
+load any extra code, they just tell the system which version of each project to use if and
+when we need to load them.
+
+=== Loading libraries in JavaScript
+
+With the above script tags in place, you should use the <tt>require</tt> function to declare
+which objects you want to use in each inline script. For example:
+
+  <script type="text/javascript">
+  require('Ojay.HTML', 'PanelOverlay', function() {
+      
+      var overlay = new PanelOverlay({width: 300, height: 200}),
+          title   = Ojay.HTML.h2('Hello, world!');
+      
+      overlay.setContent(title)
+             .center()
+             .show('fade');
+  });
+  </script>
+  
+Only <tt>require()</tt> the objects you're directly using. The package manager should
+handle loading any other objects your code depends on; that's what all the +provides+ and
++requires+ data was for in the configuration files mentioned above. The package manager
+only downloads extra scripts if any of the objects needed to run your code are not defined;
+no script is ever loaded more than once per page.
 
