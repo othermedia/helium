@@ -48,16 +48,16 @@ This should give you the following directory layout (some files omitted):
 To serve this application, just set up an Apache VHost whose +DocumentRoot+ is the
 <tt>web/public</tt> directory. Passenger should do the rest.
 
-In addition, the Apache user will need read/write access to <tt>web/deploy.yml</tt>
-and <tt>web/loader.js</tt>, which are editable through the web frontend. The application
-will generate a directory at <tt>web/lib</tt>, which will be used to check out and
-build projects from Git -- Apache will need read/write access to this directory.
+In addition, the Apache user will need read/write access to <tt>web/deploy.yml</tt> and
+<tt>web/loader.js</tt>, which are editable through the web frontend. The application will
+generate a directory at <tt>web/lib</tt>, which will be used to check out and build
+projects from Git -- Apache will need read/write access to this directory.
 
 === Serving JavaScript files
 
 The build process exports JavaScript files for public consumption to <tt>web/lib/static</tt>,
-but by default this directory is not publicly visible. We recommend that you serve
-the deployment app from an internal domain (e.g. <tt>jsdeploy.otherworks.com</tt>), and only
+but by default this directory is not publicly visible. We recommend that you serve the
+deployment app from an internal domain (e.g. <tt>jsdeploy.otherworks.com</tt>), and only
 provide public access to the JavaScript files on another domain (e.g. <tt>js.othermedia.com</tt>).
 An Apache setup for this might look like:
 
