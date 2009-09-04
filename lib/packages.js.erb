@@ -22,13 +22,26 @@ pathname.r = <%= (config[:requires] || []).inspect %>;
 <% end -%>
 <% end -%>
 
+var log = function(string) {
+    if (!window.console) return;
+    console.info ? console.info(string)
+                 : console.log(string);
+};
+
 window.JS_CONFIG = window.JS_CONFIG || {};
 
 JS_CONFIG.use = function(project, branch) {
-    if (!this.PATH) throw 'Please set JS_CONFIG.PATH before specifying branches';
+    if (!this.PATH) throw "Please set JS_CONFIG.PATH before specifying branches";
     
-    var pkg = BRANCHES[project][branch],
-        path, config, builder;
+    var projectBranches = BRANCHES[project];
+    if (!projectBranches) throw "Could not find project '" + project + "'";
+    
+    var pkg = projectBranches[branch];
+    if (!pkg) throw "Could not find branch '" + branch + "' of project '" + project + "'";
+    
+    log("Using '" + project + "', version: '" + branch + "'");
+    
+    var path, config, builder;
     
     for (path in pkg) {
         if (!pkg.hasOwnProperty(path)) continue;
