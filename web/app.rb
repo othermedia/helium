@@ -53,7 +53,6 @@ end
 ## POST /config
 ##
 post '/config' do
-  @projects = project_config
   @action   = 'config'
   @file     = CONFIG
   @contents = params[:contents]
@@ -63,6 +62,7 @@ post '/config' do
   rescue
     @error = 'File not saved: invalid YAML'
   end
+  @projects = project_config
   erb :config
 end
 
