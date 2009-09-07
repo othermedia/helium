@@ -1,3 +1,22 @@
+/**
+ * JavaScript package manifest, generated <%= Time.now %>
+ * Requires JS.Class package manager: http://jsclass.jcoglan.com/packages.html
+ * 
+ * Usage: place the following in the HEAD of your HTML pages,
+ * then use the `require()` function to load objects on demand.
+ * 
+ *     <!-- Step 1. Load JS.Class and the package listing -->
+ *     <script type="text/javascript">JSCLASS_PATH = 'http://js.othermedia.com/js/js.class/2.1.x/build/min';</script>
+ *     <script type="text/javascript" src="http://js.othermedia.com/js/js.class/2.1.x/build/min/loader.js"></script>
+ *     <script type="text/javascript" src="http://js.othermedia.com/js/packages.js"></script>
+ *     
+ *     <!-- Step. 2 Set the load path, and declare which branches to use -->
+ *     <script type="text/javascript">
+ *     JS_CONFIG.PATH = 'http://js.othermedia.com/js';
+ *     JS_CONFIG.use('ojay', '0.4.1');
+ *     JS_CONFIG.use('panel', 'master');
+ *     </script>
+ **/
 JS.Packages(function() { with(this) {
 
 <% if @custom %>
@@ -6,52 +25,83 @@ JS.Packages(function() { with(this) {
 /*--------------------------------*/
 <% end %>
 
-var BRANCHES = {}, current, pathname;
+    var BRANCHES = {}, current, pathname;
 
 <% @tree.each_child do |project, branches| -%>
-BRANCHES['<%= project %>'] = {};
+
+    /**
+     * Manifest for project '<%= project %>'
+     **/
+    BRANCHES['<%= project %>'] = {};
 <% branches.each_child do |branch, files| -%>
-current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
+
+    /**
+     * Manifest for project '<%= project %>', branch '<%= branch %>'
+     **/
+    current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| -%>
 <% next unless config[:provides] -%>
-pathname = current['<%= path * '/' %>'] = {};
-pathname.p = <%= (config[:provides] || []).inspect %>;
-pathname.r = <%= (config[:requires] || []).inspect %>;
 
+    /**
+     * Manifest for project '<%= project %>', branch '<%= branch %>'
+     * File: '<%= path * '/' %>'
+     **/
+    pathname = current['<%= path * '/' %>'] = {};
+    pathname.p = <%= (config[:provides] || []).inspect %>;
+    pathname.r = <%= (config[:requires] || []).inspect %>;
 <% end -%>
 <% end -%>
 <% end -%>
 
-var log = function(string) {
-    if (!window.console) return;
-    console.info ? console.info(string)
-                 : console.log(string);
-};
-
-window.JS_CONFIG = window.JS_CONFIG || {};
-
-JS_CONFIG.use = function(project, branch) {
-    if (!this.PATH) throw "Please set JS_CONFIG.PATH before specifying branches";
+    /**
+     * log(message) -> undefined
+     * - message (String)
+     * 
+     * Prints configuration notices to the console for debugging
+     **/
+    var log = function(string) {
+        if (!window.console) return;
+        console.info ? console.info(string)
+                     : console.log(string);
+    };
     
-    var projectBranches = BRANCHES[project];
-    if (!projectBranches) throw "Could not find project '" + project + "'";
+    window.JS_CONFIG = window.JS_CONFIG || {};
     
-    var pkg = projectBranches[branch];
-    if (!pkg) throw "Could not find branch '" + branch + "' of project '" + project + "'";
-    
-    log("Using '" + project + "', version: '" + branch + "'");
-    
-    var path, config, builder;
-    
-    for (path in pkg) {
-        if (!pkg.hasOwnProperty(path)) continue;
+    /**
+     * JS_CONFIG.use(project, branch) -> undefined
+     * - project (String)
+     * - branch (String)
+     * 
+     * Selects a branch to use from a project, add adds the manifest for the given
+     * branch to the JS.Class package registry. This does not load any extra
+     * JavaScript files, it simply tells JS.Class which files to use when that
+     * project's objects are required.
+     * 
+     * The JS_CONFIG.PATH variable *must* be set before calling this function so
+     * we can set the full path to the files in the given branch.
+     **/
+    JS_CONFIG.use = function(project, branch) {
+        if (!this.PATH) throw "Please set JS_CONFIG.PATH before specifying branches";
         
-        config  = pkg[path];
-        builder = file([this.PATH, project, branch].join('/') + path);
-        builder.provides.apply(builder, config.p);
-        builder.requires.apply(builder, config.r);
-    }
-};
+        var projectBranches = BRANCHES[project];
+        if (!projectBranches) throw "Could not find project '" + project + "'";
+        
+        var pkg = projectBranches[branch];
+        if (!pkg) throw "Could not find branch '" + branch + "' of project '" + project + "'";
+        
+        log("Using '" + project + "', version: '" + branch + "'");
+        
+        var path, config, builder;
+        
+        for (path in pkg) {
+            if (!pkg.hasOwnProperty(path)) continue;
+            
+            config  = pkg[path];
+            builder = file([this.PATH, project, branch].join('/') + path);
+            builder.provides.apply(builder, config.p);
+            builder.requires.apply(builder, config.r);
+        }
+    };
 
 /*--- end JS.Packages block ---*/
 }});

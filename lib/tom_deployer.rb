@@ -15,15 +15,16 @@ class TomDeployer
   
   VERSION = '0.1.0'
   
-  ROOT        = File.dirname(__FILE__)
-  CONFIG_FILE = 'deploy.yml'
+  ROOT          = File.dirname(__FILE__)
+  CONFIG_FILE   = 'deploy.yml'
+  REPOS         = 'repos'
+  STATIC        = 'static'
   JS_CONFIG_TEMPLATE = 'packages.js.erb'
-  REPOS       = 'repos'
-  STATIC      = 'static'
-  PACKAGES    = 'packages.js'
-  GIT         = '.git'
-  HEAD        = 'HEAD'
-  JAKE_FILE   = Jake::CONFIG_FILE
+  PACKAGES      = 'packages-src.js'
+  PACKAGES_MIN  = 'packages.js'
+  GIT           = '.git'
+  HEAD          = 'HEAD'
+  JAKE_FILE     = Jake::CONFIG_FILE
   
   SEP  = File::SEPARATOR
   BYTE = 1024.0
@@ -112,11 +113,12 @@ class TomDeployer
       end
     end
     
-    File.open(static_dir(PACKAGES), 'w') do |f|
-      template = File.read(join(ROOT, JS_CONFIG_TEMPLATE))
-      code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
-      f.write(code)
-    end
+    template = File.read(join(ROOT, JS_CONFIG_TEMPLATE))
+    code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
+    packed   = Packr.pack(code, :shrink_vars => true)
+      
+    File.open(static_dir(PACKAGES), 'w') { |f| f.write(code) }
+    File.open(static_dir(PACKAGES_MIN), 'w') { |f| f.write(packed) }
   end
     
 private
