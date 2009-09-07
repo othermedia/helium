@@ -6,6 +6,39 @@ to be downloaded, built and served from a single domain, allowing any number of 
 sites to use the projects and receive automatic updates when new versions are deployed.
 
 
+== Overview
+
+The deployer is designed to allow JavaScript packages to be easily shared between client
+websites without the need to copy-paste code from project to project. It allows you to
+run a centralized server on which JavaScript code is deployed from Git repositories,
+allowing you to easily push code updates to any sites using the hosted scripts. Client
+sites are able to specify which branch or tag of a package they wish to use, and code
+dependencies are transparently handled so that each site loads only the code it needs.
+
+The system is based around the JS.Class package manager (http://jsclass.jcoglan.com/packages.html),
+which provides a pure-JavaScript dependency manager for on-demand loading of JavaScript
+objects. It requires only two files to be loaded initially: the JS.Class package loader
+and a list of package dependency data. Our deployer programmatically generates this
+package listing from metadata stored in Git repositories, so that client projects using
+this system do not have to maintain the list themselves. The only code required in each
+client project is then:
+
+  <!-- Step 1. Load JS.Class and the package listing -->
+  <script type="text/javascript">JSCLASS_PATH = 'http://js.othermedia.com/js/js.class/2.1.x/build/min';</script>
+  <script type="text/javascript" src="http://js.othermedia.com/js/js.class/2.1.x/build/min/loader.js"></script>
+  <script type="text/javascript" src="http://js.othermedia.com/js/packages.js"></script>
+  
+  <!-- Step. 2 Set the load path, and declare which branches to use -->
+  <script type="text/javascript">
+  JS_CONFIG.PATH = 'http://js.othermedia.com/js';
+  JS_CONFIG.use('ojay', '0.4.1');
+  JS_CONFIG.use('panel', 'master');
+  </script>
+
+After this, the <tt>require()</tt> function can be used to load any object deployed to
+the central server on demand. See the above-linked JS.Class documentation for more info.
+
+
 == Requirements
 
 Before deploying this app, you will need Ruby, Passenger (mod_rack), and Git installed
