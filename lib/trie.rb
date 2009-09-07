@@ -39,30 +39,6 @@ class Trie
     trie.traverse(key[1..-1], create_if_absent)
   end
   
-  def prefixes
-    @children.keys
-  end
-  
-  def singular?
-    @value.nil? and @children.size == 1
-  end
-  
-  def longest_prefix(key)
-    prefix = convert_key(key).dup
-    trie = traverse(key)
-    return nil if trie.nil?
-    while trie.singular?
-      next_key = trie.prefixes.first
-      prefix << next_key
-      trie = trie.traverse(next_key)
-    end
-    case key
-      when String then prefix.join('')
-      when Symbol then prefix.join('').to_sym
-      else prefix
-    end
-  end
-  
   def inspect
     @children.inspect
   end
