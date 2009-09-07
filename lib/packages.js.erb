@@ -19,11 +19,11 @@
  **/
 JS.Packages(function() { with(this) {
 
-<% if @custom %>
+<% if @custom -%>
 /*--- User-defined loader code ---*/
-<%= @custom %>
+<%= @custom -%>
 /*--------------------------------*/
-<% end %>
+<% end -%>
 
 <%
     # Collect project, branch and object names. We'll store each unique name
@@ -41,7 +41,7 @@ JS.Packages(function() { with(this) {
     def var(string)
       '_' + string.gsub(/[^a-z0-9\_\$]/i, '$')
     end
-%>
+-%>
 
     var BRANCHES = {},
 <% names.each do |name| -%>
