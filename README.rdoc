@@ -44,12 +44,13 @@ the central server on demand. See the above-linked JS.Class documentation for mo
 Before deploying this app, you will need Ruby, Passenger (mod_rack), and Git installed
 on your webserver. You will also need the following gems:
 
-  sudo gem install grit jake packr sinatra rack
+  sudo gem install grit jake packr oyster sinatra rack
 
 A brief explanation: +grit+ provides a Ruby API for querying +git+ repositories, +jake+
 is an automated build tool for JavaScript, +packr+ is a JavaScript code compressor,
-+sinatra+ is a small Ruby web framework and +rack+ provides glue between Ruby apps and
-webservers (Passenger uses this to serve Ruby apps through Apache).
++oyster+ is an option parser for command line tools, +sinatra+ is a small Ruby web
+framework and +rack+ provides glue between Ruby apps and webservers (Passenger uses this
+to serve Ruby apps through Apache).
 
 
 == Installation
