@@ -34,8 +34,9 @@ JS.Packages(function() { with(this) {
     
     @tree.each do |key, config|
       key[0..1].each(&add)
-      config[:provides].each(&add) if config[:provides]
-      config[:requires].each(&add) if config[:requires]
+      [:provides, :requires, :uses].each do |list|
+        config[list].each(&add) if config[list]
+      end
     end
     
     def var(string)
@@ -71,6 +72,7 @@ JS.Packages(function() { with(this) {
     pathname = current['<%= path * '/' %>'] = {};
     pathname.p = [ <%= (config[:provides] || []).map(&method(:var)) * ', ' %> ];
     pathname.r = [ <%= (config[:requires] || []).map(&method(:var)) * ', ' %> ];
+    pathname.u = [ <%= (config[:uses] || []).map(&method(:var)) * ', ' %> ];
 <% end -%>
 <% end -%>
 <% end -%>
@@ -122,6 +124,7 @@ JS.Packages(function() { with(this) {
             builder = file([this.PATH, project, branch].join('/') + path);
             builder.provides.apply(builder, config.p);
             builder.requires.apply(builder, config.r);
+            builder.uses.apply(builder, config.u);
         }
     };
 
