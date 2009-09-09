@@ -3,7 +3,6 @@ require 'erb'
 require 'yaml'
 require 'fileutils'
 require 'find'
-require 'set'
 
 require 'rubygems'
 require 'grit'

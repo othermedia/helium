@@ -25,43 +25,20 @@ JS.Packages(function() { with(this) {
 /*--------------------------------*/
 <% end -%>
 
-<%
-    # Collect project, branch and object names. We'll store each unique name
-    # in a JavaScript local variable for more efficient PackR compression.
-    
-    names = Set.new
-    add = names.method(:add)
-    
-    @tree.each do |key, config|
-      key[0..1].each(&add)
-      [:provides, :requires, :uses].each do |list|
-        config[list].each(&add) if config[list]
-      end
-    end
-    
-    def var(string)
-      '_' + string.gsub(/[^a-z0-9\_\$]/i, '$')
-    end
--%>
-
-    var BRANCHES = {},
-<% names.each do |name| -%>
-        <%=var name %> = '<%= name %>',
-<% end -%>
-        current, pathname;
+    var BRANCHES = {}, current, pathname;
 
 <% @tree.each_child do |project, branches| -%>
 
     /**
      * Manifest for project '<%= project %>'
      **/
-    BRANCHES[<%=var project %>] = {};
+    BRANCHES['<%= project %>'] = {};
 <% branches.each_child do |branch, files| -%>
 
     /**
      * Manifest for project '<%= project %>', branch '<%= branch %>'
      **/
-    current = BRANCHES[<%=var project %>][<%=var branch %>] = {};
+    current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| -%>
 <% next unless config[:provides] -%>
 
@@ -70,9 +47,9 @@ JS.Packages(function() { with(this) {
      * File: '<%= path * '/' %>'
      **/
     pathname = current['<%= path * '/' %>'] = {};
-    pathname.p = [ <%= (config[:provides] || []).map(&method(:var)) * ', ' %> ];
-    pathname.r = [ <%= (config[:requires] || []).map(&method(:var)) * ', ' %> ];
-    pathname.u = [ <%= (config[:uses] || []).map(&method(:var)) * ', ' %> ];
+    pathname.p = <%= (config[:provides] || []).inspect %>;
+    pathname.r = <%= (config[:requires] || []).inspect %>;
+    pathname.u = <%= (config[:uses] || []).inspect %>;
 <% end -%>
 <% end -%>
 <% end -%>
