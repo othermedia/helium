@@ -1,4 +1,4 @@
-<h2>Edit: <%= @file %></h2>
+<h2>Edit: <%= File.basename(@file) %></h2>
 
 <% if @error %>
   <p class="error"><%= @error %></p>
