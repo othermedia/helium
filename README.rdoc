@@ -24,13 +24,13 @@ this system do not have to maintain the list themselves. The only code required 
 client project is then:
 
   <!-- Step 1. Load JS.Class and the package listing -->
-  <script type="text/javascript">JSCLASS_PATH = 'http://js.othermedia.com/js/js.class/2.1.x/build/min';</script>
-  <script type="text/javascript" src="http://js.othermedia.com/js/js.class/2.1.x/build/min/loader.js"></script>
-  <script type="text/javascript" src="http://js.othermedia.com/js/packages.js"></script>
+  <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';</script>
+  <script type="text/javascript" src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js"></script>
+  <script type="text/javascript" src="http://js.example.com/js/packages.js"></script>
   
   <!-- Step. 2 Set the load path, and declare which branches to use -->
   <script type="text/javascript">
-  Helium.PATH = 'http://js.othermedia.com/js';
+  Helium.PATH = 'http://js.example.com/js';
   Helium.use('ojay', '0.4.1');
   Helium.use('panel', 'master');
   </script>
@@ -55,8 +55,7 @@ to serve Ruby apps through Apache).
 
 == Installation
 
-Check this project out onto your server (your SSH key must be registered with the
-othermedia account):
+Check this project out onto your server:
 
   git clone git://github.com/othermedia/helium.git
 
@@ -92,16 +91,16 @@ projects from Git -- Apache will need read/write access to this directory.
 
 The build process exports JavaScript files for public consumption to <tt>web/lib/static</tt>,
 but by default this directory is not publicly visible. We recommend that you serve the
-deployment app from an internal domain (e.g. <tt>jsdeploy.otherworks.com</tt>), and only
-provide public access to the JavaScript files on another domain (e.g. <tt>js.othermedia.com</tt>).
+deployment app from an internal domain (e.g. <tt>helium.example.com</tt>), and only
+provide public access to the JavaScript files on another domain (e.g. <tt>js.example.com</tt>).
 An Apache setup for this might look like:
 
-  <VirtualHost jsdeploy.otherworks.com:80>
+  <VirtualHost helium.example.com:80>
     DirectoryIndex index.html
     DocumentRoot /path/to/helium/web/public/
   </VirtualHost>
   
-  <VirtualHost js.othermedia.com:80>
+  <VirtualHost js.example.com:80>
     DirectoryIndex index.html
     DocumentRoot /path/to/some_public_dir/
     
@@ -113,7 +112,7 @@ Then set up a symlink from the live domain to the <tt>web/lib/static</tt> direct
 
   ln -s /path/to/helium/web/lib/static /path/to/some_public_dir/js
 
-The JavaScript files will then be available under <tt>http://js.othermedia.com/js</tt>.
+The JavaScript files will then be available under <tt>http://js.example.com/js</tt>.
 Alternatively, use +rsync+ to copy everything in <tt>web/lib/static</tt> to another
 domain. If you want to serve the scripts from the deployment app itself, do this:
 
@@ -124,8 +123,8 @@ domain. If you want to serve the scripts from the deployment app itself, do this
 == Usage
 
 For the rest of this article, we'll assume the deployment app is running at
-http://jsdeploy.otherworks.com, and the deployed JavaScript files are available under
-http://js.othermedia.com/js, as suggested using the above Apache setup.
+http://helium.example.com, and the deployed JavaScript files are available under
+http://js.example.com/js, as suggested using the above Apache setup.
 
 === JavaScript project setup
 
@@ -186,23 +185,23 @@ Our deployment system performs the following steps on every project registered:
 
 === Using the deployment app
 
-On first accessing http://jsdeploy.otherworks.com, there will be no JavaScript projects
+On first accessing http://helium.example.com, there will be no JavaScript projects
 listed. To add projects, we need to edit a YAML file listing projects and their Git
 URIs. To support the client-side package manager, the deploy system must at least have
 the JS.Class project registered. Projects are listed as key-value pairs by project name
 and Git URI.
 
-Go to http://jsdeploy.otherworks.com/config and enter the following projects:
+Go to http://helium.example.com/config and enter the following projects:
 
   ---
   js.class:   git://github.com/jcoglan/js.class.git
-  ojay:       git@github.com:othermedia/ojay.git
+  ojay:       git://github.com/othermedia/ojay.git
   panel:      git@github.com:othermedia/panel.git
 
 After clicking 'Save', these projects should be listed in the sidebar. Check all three,
 and hit 'Deploy' to import them all into the deploy system. After a few seconds you should
 see a log output telling you which projects and branches were built. There should also
-now be a JavaScript file at http://js.othermedia.com/js/pacakges.js that lists the files
+now be a JavaScript file at http://js.example.com/js/pacakges.js that lists the files
 available on the server.
 
 === Client-side package management
@@ -212,12 +211,12 @@ at http://jsclass.jcoglan.com/packages.html). This provides a dependency manager
 simple way to load JavaScript objects on demand. To set it up, you just need the following
 in the head of your HTML pages:
 
-  <script type="text/javascript">JSCLASS_PATH = 'http://js.othermedia.com/js/js.class/2.1.x/build/min';</script>
-  <script type="text/javascript" src="http://js.othermedia.com/js/js.class/2.1.x/build/min/loader.js"></script>
-  <script type="text/javascript" src="http://js.othermedia.com/js/packages.js"></script>
+  <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';</script>
+  <script type="text/javascript" src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js"></script>
+  <script type="text/javascript" src="http://js.example.com/js/packages.js"></script>
   
   <script type="text/javascript">
-  Helium.PATH = 'http://js.othermedia.com/js';
+  Helium.PATH = 'http://js.example.com/js';
   Helium.use('ojay', '0.4.1');
   Helium.use('panel', 'master');
   </script>
