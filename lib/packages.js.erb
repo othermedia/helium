@@ -12,9 +12,9 @@
  *     
  *     <!-- Step. 2 Set the load path, and declare which branches to use -->
  *     <script type="text/javascript">
- *     JS_CONFIG.PATH = 'http://js.othermedia.com/js';
- *     JS_CONFIG.use('ojay', '0.4.1');
- *     JS_CONFIG.use('panel', 'master');
+ *     Helium.PATH = 'http://js.othermedia.com/js';
+ *     Helium.use('ojay', '0.4.1');
+ *     Helium.use('panel', 'master');
  *     </script>
  **/
 JS.Packages(function() { with(this) {
@@ -66,10 +66,10 @@ JS.Packages(function() { with(this) {
                      : console.log(string);
     };
     
-    window.JS_CONFIG = window.JS_CONFIG || {};
+    window.Helium = window.Helium || {};
     
     /**
-     * JS_CONFIG.use(project, branch) -> undefined
+     * Helium.use(project, branch) -> undefined
      * - project (String)
      * - branch (String)
      * 
@@ -78,11 +78,11 @@ JS.Packages(function() { with(this) {
      * JavaScript files, it simply tells JS.Class which files to use when that
      * project's objects are required.
      * 
-     * The JS_CONFIG.PATH variable *must* be set before calling this function so
+     * The Helium.PATH variable *must* be set before calling this function so
      * we can set the full path to the files in the given branch.
      **/
-    JS_CONFIG.use = function(project, branch) {
-        if (!this.PATH) throw "Please set JS_CONFIG.PATH before specifying branches";
+    Helium.use = function(project, branch) {
+        if (!this.PATH) throw "Please set Helium.PATH before specifying branches";
         
         var projectBranches = BRANCHES[project];
         if (!projectBranches) throw "Could not find project '" + project + "'";

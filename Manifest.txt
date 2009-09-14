@@ -2,8 +2,9 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
-lib/tom_deployer.rb
-lib/trie.rb
+lib/helium.rb
+lib/helium/deployer.rb
+lib/helium/trie.rb
 lib/packages.js.erb
 web/config.ru
 web/app.rb
@@ -11,7 +12,7 @@ web/public/style.css
 web/views/layout.erb
 web/views/index.erb
 web/views/config.erb
-test/test_tom_deployer.rb
+test/test_helium.rb
 test/deploy.yml
 test/index.html
 test/yui-conf.js

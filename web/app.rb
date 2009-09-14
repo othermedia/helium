@@ -3,7 +3,7 @@ require 'sinatra'
 require 'yaml'
 
 ROOT_DIR = File.expand_path( File.dirname(__FILE__) )
-require File.join(ROOT_DIR, '..', 'lib', 'tom_deployer')
+require File.join(ROOT_DIR, '..', 'lib', 'helium')
 
 LIB_DIR  = 'lib'
 CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
@@ -23,7 +23,7 @@ end
 ## POST /deploy
 ##
 post '/deploy' do
-  deployer = TomDeployer.new(ROOT_DIR, LIB_DIR)
+  deployer = Helium::Deployer.new(ROOT_DIR, LIB_DIR)
   logger   = Logger.new
   deployer.add_observer(logger)
   
