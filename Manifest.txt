@@ -9,9 +9,9 @@ lib/packages.js.erb
 web/config.ru
 web/app.rb
 web/public/style.css
+web/views/edit.erb
 web/views/layout.erb
 web/views/index.erb
-web/views/config.erb
 test/test_helium.rb
 test/deploy.yml
 test/index.html

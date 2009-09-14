@@ -71,7 +71,7 @@ This should give you the following directory layout (some files omitted):
           /public
               /style.css
           /views
-              config.erb
+              edit.erb
               index.erb
               layout.erb
           app.rb
