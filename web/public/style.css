@@ -1,8 +1,10 @@
 body { font: 16px/1.5 Georgia, Times New Roman, serif; background: #f0f0f0; color: #000; margin: 0; padding: 0; text-align: center; }
 .container { background: #fff; text-align: left; margin: 0 auto; padding: 80px 48px 0; width: 860px; }
 
+p { margin: 1.5em 0; }
 .clear { clear: both; font-size: 0; height: 0; overflow: hidden; }
-a { background: #4d6f9f; color: #fff; text-decoration: none; }
+a { background: #62afcd; color: #fff; text-decoration: none; }
+pre, code { font-size: 80%; }
 
 .header { border-bottom: 1px solid #ccc; margin: 0 -48px; padding: 0 48px; }
 
@@ -19,7 +21,7 @@ h1 .tagline { font: italic 14px Times New Roman, serif; display: block; padding:
 
 form { clear: left; float: left; width: 200px; margin: 24px 80px 24px 0; }
 form ul { margin: 0; padding: 0; }
-form li { margin: 0 0 4px; padding: 4px 8px; list-style: none; background: #62afcd; color: #fff; }
+form li { margin: 0 0 4px; padding: 4px 8px; list-style: none; background: #4d6f9f; color: #fff; }
 
 .main { float: left; width: 580px; padding: 24px 0; }
 h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }

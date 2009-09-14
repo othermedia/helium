@@ -7,5 +7,49 @@
   </ul>
 <% else %>
   <h2>Helium</h2>
+  
+  <p>Helium deploys versioned copies of JavaScript projects from Git repositories,
+  using <a href="http://github.com/jcoglan/jake">Jake</a> to generate package listings
+  for use with <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>.</p>
+  
+  <p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
+  For example:</p>
+  
+  <pre>  ---
+  js.class:     git://github.com/jcoglan/js.class.git
+  yui:          git://github.com/othermedia/yui.git
+  ojay:         git://github.com/othermedia/ojay.git</pre>
+  
+  <p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
+  not deployed using Helium. For example the following are loaders for Google Maps:</p>
+  
+  <pre>  loader(function(cb) {
+      var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
+      load(url, cb);
+  })  .provides('google.load');
+  
+  loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
+      .provides('GMap2', 'GClientGeocoder')
+      .requires('google.load');</pre>
+  
+  <p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>
+  section of your pages:</p>
+  
+  <pre>  &lt;script type="text/javascript">
+  JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';
+  &lt;/script>
+  
+  &lt;script type="text/javascript"
+    src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js">
+    &lt;/script>
+  &lt;script type="text/javascript" 
+    src="http://js.example.com/js/packages.js">
+    &lt;/script>
+    
+    &lt;script type="text/javascript">
+    Helium.PATH = 'http://js.example.com/js';
+    Helium.use('yui', '2.7.0');
+    Helium.use('ojay', '0.4.1');
+    &lt;/script></pre>
 <% end %>
 
