@@ -1,41 +1,54 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!doctype html>
 
 <html>
 <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>theOTHERmedia JavaScript deploy system</title>
+  <title>Helium</title>
   <link rel="stylesheet" href="/style.css" type="text/css" media="screen">
 </head>
 <body>
 <div class="container">
 
-  <h1><a href="http://othermedia.com">theOTHERmedia</a>
-     <span>JavaScript deploy system</span></h1>
-  
-  <div class="sidebar">
+  <div class="header">
+    <h1><a href="/"><span class="symbol">He</span>lium</a>
+      <span class="tagline">Git-backed JavaScript deployment</span></h1>
     
-    <form action="/deploy" method="post">
+    <ul class="navigation">
+      <li>
+        <h3><a href="/config">Edit configuration</a></h3>
+        <p>Register libraries using their Git URL to have Helium deploy them.</p>
+      </li>
+      <li>
+        <h3><a href="/custom">Custom loaders</a></h3>
+        <p>Add custom loader code for loading code from outside Helium.</p>
+      </li>
+    </ul>
+    <div class="clear"></div>
+  </div>
+  
+  <form action="/deploy" method="post">
+    <% unless @projects.empty? %>
+      <ul class="projects">
       <% @projects.keys.sort.each_with_index do |name, i| %>
-        <div class="project">
+        <li>
           <input type="hidden" name="projects[<%= name %>]" value="0">
           <input type="checkbox" class="checkbox" name="projects[<%= name %>]" id="projects_<%= name %>" value="1">
           <label for="projects_<%= name %>"><%= name %></label>
-        </div>
+        </li>
       <% end %>
+      </ul>
       <input type="submit" value="Deploy">
-    </form>
-    
-    <a id="editConfig" href="/config">Edit configuration</a><br>
-    <a id="editConfig" href="/custom">Custom loaders</a>
-  </div>
+    <% end %>
+  </form>
   
   <div class="main">
     <%= yield %>
   </div>
   
+  <div class="clear"></div>
   <div class="footer">
-    &copy; 2009 theOTHERmedia. JavaScript projects and this application are
-      <a href="http://github.com/othermedia">hosted on GitHub</a>.
+    &copy; 2009 <a href="http://othermedia.com">theOTHERmedia</a>. Source code is
+    <a href="http://github.com/othermedia/helium">hosted on GitHub</a>.
   </div>
 
 </div>

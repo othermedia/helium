@@ -1,10 +1,11 @@
 <%if @log %>
-<div class="logs">
-  <ul>
+  <h2>Deploy logs</h2>
+  <ul class="logs">
   <% @log.each do |msg| %>
     <li><%= msg %></li>
   <% end %>
   </ul>
-</div>
+<% else %>
+  <h2>Helium</h2>
 <% end %>
 

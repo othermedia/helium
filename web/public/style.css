@@ -1,20 +1,33 @@
-body { margin: 0; padding: 0; background: #fff; color: #000;
-       font: 13px/1.385 Helvetica, Arial, sans-serif;
-       border-top: 16px solid #EC6D0A; text-align: center; }
-.container { width: 960px; margin: 0 auto; text-align: left; }
-h1 { font-size: 200%; margin: 1em 0; padding-bottom: 1em; border-bottom: 1px solid #5C5C4F; }
-h1 a { display: block; width: 230px; height: 0; overflow: hidden;
-       padding-top: 32px; background: url(/logo.gif) top left no-repeat; }
-h1 span { color: #444; font-weight: normal; font-size: 70%;
-          display: block; padding-left: 26px; margin-top: 6px; }
-.sidebar { width: 220px; padding: 0 19px 24px 0; border-right: 1px solid #5C5C4F; float: left; }
-.sidebar label { font-size: 120%; }
-.sidebar .project { margin-bottom: 0.5em; }
-.main { width: 700px; padding-left: 20px; float: left; }
-.main ul, .main li { list-style: none; margin-top: 0; }
-.main li { margin-bottom: 0.5em; }
-.main form textarea { width: 600px; height: 400px; display: block; }
-.footer { clear: both; margin: 1em 0 2em; font-size: 80%; color: #444;
-          border-top: 1px solid #5C5C4F; padding: 1em 0; }
-a { color: #EC6D0A; }
-.error { margin: 0 0 1em; font-size: 120%; font-weight: bold; color: #c90; }
+body { font: 16px/1.5 Georgia, Times New Roman, serif; background: #f0f0f0; color: #000; margin: 0; padding: 0; text-align: center; }
+.container { background: #fff; text-align: left; margin: 0 auto; padding: 80px 48px 0; width: 860px; }
+
+.clear { clear: both; font-size: 0; height: 0; overflow: hidden; }
+a { background: #4d6f9f; color: #fff; text-decoration: none; }
+
+.header { border-bottom: 1px solid #ccc; margin: 0 -48px; padding: 0 48px; }
+
+h1 { margin: 0 0 24px -48px; _margin-left: -24px; float: left; width: 328px; }
+h1 a { font: 72px Helvetica, Arial, sans-serif; font-weight: normal; letter-spacing: -0.08em; background: #c4e510; color: #fff; text-decoration: none; display: block; padding: 0 24px 0 48px; }
+h1 a .symbol { font-style: italic; font-weight: normal; font-family: Georgia; }
+h1 .tagline { font: italic 14px Times New Roman, serif; display: block; padding: 8px 24px 0 48px; }
+
+.navigation { float: left; margin: 0; padding: 0; }
+.navigation li { list-style: none; float: left; margin: 0 0 0 60px; _margin: 0 0 0 30px; padding: 0; width: 220px; }
+.navigation h3 { margin: 0; padding: 0; }
+.navigation a { font: 16px Helvetica, Arial, sans-serif; padding: 0 8px; }
+.navigation p { font-size: 90%; color: #444; margin: 0.4em 0; }
+
+form { clear: left; float: left; width: 200px; margin: 24px 80px 24px 0; }
+form ul { margin: 0; padding: 0; }
+form li { margin: 0 0 4px; padding: 4px 8px; list-style: none; background: #62afcd; color: #fff; }
+
+.main { float: left; width: 580px; padding: 24px 0; }
+h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
+.logs { font-size: 80%; font-family: Helvetica, Arial, sans-serif; }
+.logs li { margin-bottom: 1em; }
+
+.main form { margin: 0; }
+.main textarea { width: 500px; height: 300px; }
+
+.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px; font-size: 90%; }
+
