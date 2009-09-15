@@ -6,11 +6,14 @@
   <% end %>
   </ul>
 <% else %>
-  <h2>Helium</h2>
+  <h2>Helium, the JavaScript package server</h2>
   
-  <p>Helium deploys versioned copies of JavaScript projects from Git repositories,
+  <p>Helium deploys versioned copies of JavaScript libraries from Git repositories,
   using <a href="http://github.com/jcoglan/jake">Jake</a> to generate package listings
-  for use with <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>.</p>
+  for use with <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>. It
+  provides a central server from which JavaScript objects can be loaded on-demand, and
+  handles dependency resolution automatically using metadata stored in each library&rsquo;s
+  Git repo.</p>
   
   <p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
   For example:</p>
