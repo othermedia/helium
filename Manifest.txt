@@ -11,6 +11,8 @@ lib/helium/views/index.erb
 lib/helium/views/layout.erb
 lib/packages.js.erb
 web/config.ru
+web/public/prettify.css
+web/public/prettify.js
 web/public/style.css
 test/test_helium.rb
 test/deploy.yml

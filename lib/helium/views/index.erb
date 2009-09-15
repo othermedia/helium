@@ -15,7 +15,7 @@
   <p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
   For example:</p>
   
-  <pre>---
+  <pre class="prettyprint">---
 js.class:     git://github.com/jcoglan/js.class.git
 yui:          git://github.com/othermedia/yui.git
 ojay:         git://github.com/othermedia/ojay.git</pre>
@@ -23,7 +23,7 @@ ojay:         git://github.com/othermedia/ojay.git</pre>
   <p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
   not deployed using Helium. For example the following are loaders for Google Maps:</p>
   
-  <pre>loader(function(cb) {
+  <pre class="prettyprint">loader(function(cb) {
     var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
     load(url, cb);
 })  .provides('google.load');
@@ -35,7 +35,7 @@ loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
   <p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>
   section of your pages to set up the package manager:</p>
   
-  <pre>&lt;script type="text/javascript">
+  <pre class="prettyprint">&lt;script type="text/javascript">
 JSCLASS_PATH = 'http://<%= @domain %>/js/js.class/2.1.x/build/min';
 &lt;/script>
 
@@ -55,7 +55,7 @@ Helium.use('ojay', '0.4.1');
   <p>Use the <code>require()</code> function throughout your pages to load JavaScript
   objects on demand. Dependencies are automatically handled for you:</p>
   
-  <pre>&lt;script type="text/javascript">
+  <pre class="prettyprint">&lt;script type="text/javascript">
 require('GMap2', 'YAHOO.util.Selector', function() {
     
     var box   = document.getElementById('mapview'),
