@@ -32,5 +32,5 @@ h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
 .main form { margin: 0; }
 .main textarea { width: 500px; height: 300px; }
 
-.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px; font-size: 90%; }
+.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; }
 
