@@ -4,13 +4,14 @@ body { font: 16px/1.5 Georgia, Times New Roman, serif; background: #f0f0f0; colo
 p { margin: 1.5em 0; }
 .clear { clear: both; font-size: 0; height: 0; overflow: hidden; }
 a { background: #62afcd; color: #fff; text-decoration: none; }
-pre, code { font-size: 80%; }
+code { font-size: 80%; }
+pre { font-size: 70%; color: #666; padding: 0 24px; }
 
 .header { border-bottom: 1px solid #ccc; margin: 0 -48px; padding: 0 48px; }
 
 h1 { margin: 0 0 24px -48px; _margin-left: -24px; float: left; width: 328px; }
 h1 a { font: 72px Helvetica, Arial, sans-serif; font-weight: normal; letter-spacing: -0.08em; background: #c4e510; color: #fff; text-decoration: none; display: block; padding: 0 24px 0 48px; }
-h1 a .symbol { font-style: italic; font-weight: normal; font-family: Georgia; }
+h1 a .symbol { font-style: italic; font-family: Georgia, Times New Roman, serif; }
 h1 .tagline { font: italic 14px Times New Roman, serif; display: block; padding: 8px 24px 0 48px; }
 
 .navigation { float: left; margin: 0; padding: 0; }

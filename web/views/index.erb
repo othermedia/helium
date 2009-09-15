@@ -15,41 +15,55 @@
   <p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
   For example:</p>
   
-  <pre>  ---
-  js.class:     git://github.com/jcoglan/js.class.git
-  yui:          git://github.com/othermedia/yui.git
-  ojay:         git://github.com/othermedia/ojay.git</pre>
+  <pre>---
+js.class:     git://github.com/jcoglan/js.class.git
+yui:          git://github.com/othermedia/yui.git
+ojay:         git://github.com/othermedia/ojay.git</pre>
   
   <p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
   not deployed using Helium. For example the following are loaders for Google Maps:</p>
   
-  <pre>  loader(function(cb) {
-      var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
-      load(url, cb);
-  })  .provides('google.load');
-  
-  loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
-      .provides('GMap2', 'GClientGeocoder')
-      .requires('google.load');</pre>
+  <pre>loader(function(cb) {
+    var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
+    load(url, cb);
+})  .provides('google.load');
+
+loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
+    .provides('GMap2', 'GClientGeocoder')
+    .requires('google.load');</pre>
   
   <p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>
-  section of your pages:</p>
+  section of your pages to set up the package manager:</p>
   
-  <pre>  &lt;script type="text/javascript">
-  JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';
+  <pre>&lt;script type="text/javascript">
+JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';
+&lt;/script>
+
+&lt;script type="text/javascript"
+  src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js">
   &lt;/script>
+&lt;script type="text/javascript" 
+  src="http://js.example.com/js/packages.js">
+  &lt;/script>
+
+&lt;script type="text/javascript">
+Helium.PATH = 'http://js.example.com/js';
+Helium.use('yui', '2.7.0');
+Helium.use('ojay', '0.4.1');
+&lt;/script></pre>
   
-  &lt;script type="text/javascript"
-    src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js">
-    &lt;/script>
-  &lt;script type="text/javascript" 
-    src="http://js.example.com/js/packages.js">
-    &lt;/script>
+  <p>Use the <code>require()</code> function throughout your pages to load JavaScript
+  objects on demand. Dependencies are automatically handled for you:</p>
+  
+  <pre>&lt;script type="text/javascript">
+require('GMap2', 'YAHOO.util.Selector', function() {
     
-    &lt;script type="text/javascript">
-    Helium.PATH = 'http://js.example.com/js';
-    Helium.use('yui', '2.7.0');
-    Helium.use('ojay', '0.4.1');
-    &lt;/script></pre>
+    var box   = document.getElementById('mapview'),
+        map   = new GMap2(box),
+        links = YAHOO.util.Selector.query('a');
+    
+    // &amp;c.
+});
+&lt;/script></pre>
 <% end %>
 
