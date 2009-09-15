@@ -2,6 +2,7 @@ History.txt
 Manifest.txt
 README.txt
 Rakefile
+bin/he
 lib/helium.rb
 lib/helium/deployer.rb
 lib/helium/trie.rb
@@ -11,6 +12,8 @@ lib/helium/views/index.erb
 lib/helium/views/layout.erb
 lib/packages.js.erb
 web/config.ru
+web/deploy.yml
+web/custom.js
 web/public/prettify.css
 web/public/prettify.js
 web/public/style.css

@@ -2,7 +2,5 @@ doc
 pkg
 README.txt
 web/lib
-web/deploy.yml
-web/custom.js
 web/public/js
 test/output

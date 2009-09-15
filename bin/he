@@ -1,0 +1,36 @@
+home = File.join(File.dirname(__FILE__), '..')
+
+require 'fileutils'
+require 'rubygems'
+require 'oyster'
+
+require File.join(home, 'lib', 'helium')
+
+spec = Oyster.spec do
+  name 'helium -- the Git-backed JavaScript package server'
+  author 'James Coglan <jcoglan@googlemail.com>'
+  
+  description <<-EOS
+    Helium is a web application for deploying and serving versioned copies of
+    JavaScript libraries from Git repositories. The 'he' command installs the
+    application to a local directory, ready for serving through Passenger.
+  EOS
+  
+  synopsis 'he DIRECTORY'
+end
+
+begin; options = spec.parse
+rescue; exit
+end
+
+dir = options[:unclaimed].first
+if dir.nil?
+  puts "Installation directory required -- type `he --help` for more info"
+  exit
+end
+
+dir = File.expand_path(dir)
+puts "Installing Helium app in #{dir}"
+
+FileUtils.cp_r(File.join(home, 'web'), dir)
+
