@@ -1,5 +1,7 @@
 = Helium
 
+* http://github.com/othermedia/helium
+
 Helium is a Ruby application for running a Git-backed JavaScript package distribution
 system and CDN server. It comes with a web frontend that allows Git-hosted projects
 to be downloaded, built and served from a single domain, allowing any number of other
