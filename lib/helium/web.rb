@@ -2,12 +2,13 @@ require 'rubygems'
 require 'sinatra'
 require 'yaml'
 
-ROOT_DIR = File.expand_path( File.dirname(__FILE__) )
-require File.join(ROOT_DIR, '..', 'lib', 'helium')
+require File.join(File.dirname(__FILE__), '..', 'helium')
 
 LIB_DIR  = 'lib'
-CONFIG   = File.join(ROOT_DIR, 'deploy.yml')
-CUSTOM   = File.join(ROOT_DIR, 'custom.js')
+CONFIG   = File.join(APP_DIR, 'deploy.yml')
+CUSTOM   = File.join(APP_DIR, 'custom.js')
+
+set :public, File.join(APP_DIR, 'public')
 
 # Returns the data structure contained in the app's deploy.yml file.
 def project_config
@@ -33,7 +34,7 @@ end
 ## POST /deploy
 ## Deploys all selected projects and renders a list of log messages.
 post '/deploy' do
-  deployer = Helium::Deployer.new(ROOT_DIR, LIB_DIR)
+  deployer = Helium::Deployer.new(APP_DIR, LIB_DIR)
   logger   = Logger.new
   deployer.add_observer(logger)
   
@@ -92,7 +93,7 @@ class Logger
   end
   
   def update(type, msg)
-    @messages << msg.gsub(File.join(ROOT_DIR, LIB_DIR), '')
+    @messages << msg.gsub(File.join(APP_DIR, LIB_DIR), '')
   end
 end
 
