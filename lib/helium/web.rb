@@ -28,6 +28,7 @@ end
 ## Home page -- just loads the project list and renders.
 get '/' do
   @projects = project_config
+  @domain   = env['HTTP_HOST']
   erb :index
 end
 
