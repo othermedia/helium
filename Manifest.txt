@@ -11,6 +11,7 @@ lib/helium/views/edit.erb
 lib/helium/views/index.erb
 lib/helium/views/layout.erb
 lib/packages.js.erb
+web/access.yml
 web/config.ru
 web/deploy.yml
 web/custom.js

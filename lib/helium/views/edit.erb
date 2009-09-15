@@ -6,6 +6,6 @@
 
 <form action="/<%=h @action %>" method="post">
   <textarea name="contents"><%=h @contents %></textarea>
-  <input type="submit" value="Save">
+  <input type="submit" value="Save" <%= 'disabled="disabled"' unless allow_write_access?(env) %>>
 </form>
 
