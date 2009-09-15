@@ -26,6 +26,11 @@ def view_file(name)
   erb :edit
 end
 
+# Shorthand for ERB's HTML-escaping method
+def h(string)
+  ERB::Util.h(string)
+end
+
 ## GET /
 ## Home page -- just loads the project list and renders.
 get '/' do

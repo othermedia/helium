@@ -33,9 +33,9 @@
       <ul class="projects">
       <% @projects.keys.sort.each_with_index do |name, i| %>
         <li>
-          <input type="hidden" name="projects[<%= name %>]" value="0">
-          <input type="checkbox" class="checkbox" name="projects[<%= name %>]" id="projects_<%= name %>" value="1">
-          <label for="projects_<%= name %>"><%= name %></label>
+          <input type="hidden" name="projects[<%=h name %>]" value="0">
+          <input type="checkbox" class="checkbox" name="projects[<%=h name %>]" id="projects_<%=h name %>" value="1">
+          <label for="projects_<%=h name %>"><%=h name %></label>
         </li>
       <% end %>
       </ul>

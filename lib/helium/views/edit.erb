@@ -1,11 +1,11 @@
-<h2>Edit: <%= File.basename(@file) %></h2>
+<h2>Edit: <%=h File.basename(@file) %></h2>
 
 <% if @error %>
-  <p class="error"><%= @error %></p>
+  <p class="error"><%=h @error %></p>
 <% end %>
 
-<form action="/<%= @action %>" method="post">
-  <textarea name="contents"><%= @contents %></textarea>
+<form action="/<%=h @action %>" method="post">
+  <textarea name="contents"><%=h @contents %></textarea>
   <input type="submit" value="Save">
 </form>
 
