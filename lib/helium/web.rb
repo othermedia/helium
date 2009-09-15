@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'rubygems'
 require 'sinatra'
 require 'yaml'
@@ -7,6 +8,7 @@ require File.join(File.dirname(__FILE__), '..', 'helium')
 LIB_DIR  = 'lib'
 CONFIG   = File.join(APP_DIR, 'deploy.yml')
 CUSTOM   = File.join(APP_DIR, 'custom.js')
+PUBLIC   = File.join(APP_DIR, 'public', 'js')
 
 set :public, File.join(APP_DIR, 'public')
 
@@ -45,7 +47,15 @@ post '/deploy' do
   end
   
   custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
-  deployer.run_builds!(:custom => custom)
+  files = deployer.run_builds!(:custom => custom)
+  
+  FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
+  
+  files.each do |path|
+    source, dest = File.join(deployer.static_dir, path), File.join(PUBLIC, path)
+    FileUtils.mkdir_p(File.dirname(dest))
+    FileUtils.cp(source, dest)
+  end
   
   @projects = project_config
   @log = logger.messages
@@ -94,7 +104,7 @@ class Logger
   end
   
   def update(type, msg)
-    @messages << msg.gsub(File.join(APP_DIR, LIB_DIR), '')
+    @messages << msg.sub(File.join(APP_DIR, LIB_DIR), '')
   end
 end
 

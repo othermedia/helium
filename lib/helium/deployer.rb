@@ -82,8 +82,9 @@ module Helium
     # a JS.Packages file listing all the files discovered. This file should be included
     # in web pages to set up the the packages manager for loading our projects.
     def run_builds!(options = {})
-      @tree   = Trie.new
-      @custom = options[:custom]
+      @tree    = Trie.new
+      @custom  = options[:custom]
+      manifest = []
       
       # Loop over checked-out projects. Skip directories with no Jake file.
       Find.find(static_dir) do |path|
@@ -94,7 +95,8 @@ module Helium
         # Event listener to capture file information from Jake
         hook = lambda do |build, package, build_type, file|
           if build_type == :min
-            file = file.gsub(/\/(\.?\/)*/, SEP).gsub(path, '')
+            file = file.gsub(/\/(\.?\/)*/, SEP).sub(path, '')
+            manifest << join(project, branch, file)
             key = [project, branch, file]
             @tree[key] = package.meta
           end
@@ -117,9 +119,9 @@ module Helium
         
       File.open(static_dir(PACKAGES), 'w') { |f| f.write(code) }
       File.open(static_dir(PACKAGES_MIN), 'w') { |f| f.write(packed) }
-    end
       
-  private
+      manifest + [PACKAGES, PACKAGES_MIN]
+    end
     
     # Returns the path to the Git repository for a given project.
     def repo_dir(project)
@@ -131,6 +133,8 @@ module Helium
       path = [@output_dir, STATIC, project, branch].compact
       join(*path)
     end
+      
+  private
     
     # Notifies observers by sending a log message.
     def log(*args)
