@@ -75,9 +75,15 @@ This will give you the following files:
   helium-app/
       public/
           style.css etc.
+      access.yml
       config.ru
       custom.js
       deploy.yml
+
+The <tt>access.yml</tt> lists IP addresses from which users may make config changes to the
+app; by default it lists <tt>0.0.0.0</tt>, <tt>127.0.0.1</tt> and <tt>localhost</tt>.
+The files <tt>deploy.yml</tt> and <tt>custom.js</tt> are editable through the web frontend;
+attempts to change these files from IPs not listed in <tt>access.yml</tt> will be blocked.
 
 === Apache setup
 
