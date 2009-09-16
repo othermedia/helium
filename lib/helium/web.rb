@@ -15,7 +15,6 @@ PUBLIC   = File.join(APP_DIR, 'public', 'js')
 
 set :public, File.join(APP_DIR, 'public')
 
-## GET /
 ## Home page -- just loads the project list and renders.
 get '/' do
   @projects = project_config
@@ -23,7 +22,6 @@ get '/' do
   erb :index
 end
 
-## POST /deploy
 ## Deploys all selected projects and renders a list of log messages.
 post '/deploy' do
   if allow_write_access?(env)
@@ -55,10 +53,8 @@ post '/deploy' do
   erb :index
 end
 
-## GET /config
 get('/config') { view_file :config }
 
-## POST /config
 ## Save changes to the configuration file, making sure it validates as YAML.
 post '/config' do
   @action   = 'config'
@@ -79,10 +75,8 @@ post '/config' do
   erb :edit
 end
 
-## GET /custom
 get('/custom') { view_file :custom }
 
-## POST /custom
 ## Save changes to the custom loaders file.
 post '/custom' do
   @action   = 'custom'
