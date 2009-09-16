@@ -21,12 +21,13 @@ module Helium
     set :public, File.join(APP_DIR, 'public')
     set :views, File.join(ROOT_DIR, 'views')
     
-    ## Home page -- just loads the project list and renders.
-    get '/' do
+    before do
       @projects = project_config
       @domain   = env['HTTP_HOST']
-      erb :index
     end
+    
+    ## Home page -- just loads the project list and renders.
+    get('/') { erb :index }
     
     ## Deploys all selected projects and renders a list of log messages.
     post '/deploy' do
@@ -55,7 +56,6 @@ module Helium
       else
         @error = 'You are not authorized to run deployments'
       end
-      @projects = project_config
       erb :index
     end
     
@@ -93,7 +93,6 @@ module Helium
       else
         @error = 'You are not authorized to edit this file'
       end
-      @projects = project_config
       erb :edit
     end
     
