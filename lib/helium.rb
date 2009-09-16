@@ -32,6 +32,7 @@ module Helium
   
   require File.join(ROOT, 'helium', 'trie')
   require File.join(ROOT, 'helium', 'deployer')
+  require File.join(ROOT, 'helium', 'logger')
   
 end
 

@@ -5,8 +5,10 @@ Rakefile
 bin/he
 lib/helium.rb
 lib/helium/deployer.rb
+lib/helium/logger.rb
 lib/helium/trie.rb
 lib/helium/web.rb
+lib/helium/web_helpers.rb
 lib/helium/views/edit.erb
 lib/helium/views/index.erb
 lib/helium/views/layout.erb

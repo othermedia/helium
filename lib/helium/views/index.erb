@@ -2,7 +2,7 @@
   <h2>Deploy logs</h2>
   <ul class="logs">
   <% @log.each do |msg| %>
-    <li><%=h msg %></li>
+    <li><%=h msg.sub(File.join(APP_DIR, LIB_DIR), '') %></li>
   <% end %>
   </ul>
   
