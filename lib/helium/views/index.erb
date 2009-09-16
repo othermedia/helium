@@ -38,7 +38,8 @@ ojay:         git://github.com/othermedia/ojay.git</pre>
 })  .provides('google.load');
 
 loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
-    .provides('GMap2', 'GClientGeocoder')
+    .provides('GMap2', 'GClientGeocoder',
+              'GEvent', 'GLatLng', 'GMarker')
     .requires('google.load');</pre>
   
   <p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>

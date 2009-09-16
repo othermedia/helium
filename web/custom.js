@@ -4,6 +4,7 @@ loader(function(cb) {
 })  .provides('google.load');
 
 loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
-    .provides('GMap2', 'GClientGeocoder')
+    .provides('GMap2', 'GClientGeocoder',
+              'GEvent', 'GLatLng', 'GMarker')
     .requires('google.load');
 
