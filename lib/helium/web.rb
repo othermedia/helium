@@ -24,30 +24,32 @@ end
 ## POST /deploy
 ## Deploys all selected projects and renders a list of log messages.
 post '/deploy' do
-  raise "Not allowed" unless allow_write_access?(env)
-  
-  deployer = Helium::Deployer.new(APP_DIR, LIB_DIR)
-  logger   = Logger.new
-  deployer.add_observer(logger)
-  
-  params[:projects].each do |name, value|
-    next unless value == '1'
-    deployer.deploy!(name, false)
+  if allow_write_access?(env)
+    deployer = Helium::Deployer.new(APP_DIR, LIB_DIR)
+    logger   = Logger.new
+    deployer.add_observer(logger)
+    
+    params[:projects].each do |name, value|
+      next unless value == '1'
+      deployer.deploy!(name, false)
+    end
+    
+    custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
+    files = deployer.run_builds!(:custom => custom)
+    
+    FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
+    
+    files.each do |path|
+      source, dest = File.join(deployer.static_dir, path), File.join(PUBLIC, path)
+      FileUtils.mkdir_p(File.dirname(dest))
+      FileUtils.cp(source, dest)
+    end
+    
+    @log = logger.messages
+  else
+    @error = 'You are not authorized to run deployments'
   end
-  
-  custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
-  files = deployer.run_builds!(:custom => custom)
-  
-  FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
-  
-  files.each do |path|
-    source, dest = File.join(deployer.static_dir, path), File.join(PUBLIC, path)
-    FileUtils.mkdir_p(File.dirname(dest))
-    FileUtils.cp(source, dest)
-  end
-  
   @projects = project_config
-  @log = logger.messages
   erb :index
 end
 

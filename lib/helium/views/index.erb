@@ -5,7 +5,13 @@
     <li><%=h msg %></li>
   <% end %>
   </ul>
-<% else %>
+  
+<% elsif @error %>
+  <h2>Deployment error</h2>
+  
+  <p class="error"><%=h @error %></p>
+  
+<% else%>
   <h2>Helium, the JavaScript package server</h2>
   
   <p>Helium deploys versioned copies of JavaScript libraries from Git repositories,
