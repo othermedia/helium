@@ -27,6 +27,11 @@ module Helium
         erb :edit
       end
       
+      # Markup for the web UI's logo
+      def logotype
+        '<span class="symbol">He</span>lium'
+      end
+      
       # Shorthand for ERB's HTML-escaping method
       def h(string)
         ERB::Util.h(string)

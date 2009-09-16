@@ -7,13 +7,14 @@ a { background: #62afcd; color: #fff; text-decoration: none; }
 code { font-size: 80%; }
 pre { font-size: 70%; font-family: Monaco, Consolas, Lucida Console, monospace; padding: 0 24px; }
 
+.logo { font-weight: bold; font-family: Helvetica, Arial, sans-serif; letter-spacing: -0.08em;  }
+.logo .symbol { font-style: italic; font-weight: normal; font-family: Georgia, Times New Roman, serif; padding-right: 0.06em; }
 .error { background: #fee; border: 1px solid #900; color: #900; padding: 12px; font: bold 13px Helvetica, Arial, sans-serif; }
 
 .header { border-bottom: 1px solid #ccc; margin: 0 -48px; padding: 0 48px; }
 
 h1 { margin: 0 0 24px -48px; _margin-left: -24px; float: left; width: 328px; }
-h1 a { font: bold 72px Helvetica, Arial, sans-serif; letter-spacing: -0.08em; background: #c4e510; color: #fff; text-decoration: none; display: block; padding: 0 24px 0 48px; }
-h1 a .symbol { font-style: italic; font-weight: normal; font-family: Georgia, Times New Roman, serif; padding-right: 0.06em; }
+h1 a { font-size: 72px; background: #c4e510; color: #fff; text-decoration: none; display: block; padding: 0 24px 0 48px; }
 h1 .tagline { font: italic 15px Times New Roman, serif; display: block; padding: 8px 24px 0 48px; }
 
 .navigation { float: left; margin: 0; padding: 0; }
@@ -34,5 +35,6 @@ h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
 .main form { margin: 0; }
 .main textarea { width: 576px; height: 300px; font: 0.8em Monaco, Consolas, Lucida Console, monospace; }
 
-.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; }
+.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; position: relative; }
+.footer .logo { position: absolute; left: 48px; top: 20px; margin: 0; font-size: 120%; color: #888; }
 
