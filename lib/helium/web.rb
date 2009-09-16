@@ -57,16 +57,18 @@ get('/config') { view_file :config }
 ## POST /config
 ## Save changes to the configuration file, making sure it validates as YAML.
 post '/config' do
-  raise "Not allowed" unless allow_write_access?(env)
-  
   @action   = 'config'
   @file     = CONFIG
   @contents = params[:contents]
-  begin
-    YAML.load(@contents)
-    File.open(@file, 'w') { |f| f.write(@contents) }
-  rescue
-    @error = 'File not saved: invalid YAML'
+  if allow_write_access?(env)
+    begin
+      YAML.load(@contents)
+      File.open(@file, 'w') { |f| f.write(@contents) }
+    rescue
+      @error = 'File not saved: invalid YAML'
+    end
+  else
+    @error = 'You are not authorized to edit this file'
   end
   @projects = project_config
   erb :edit
@@ -78,13 +80,15 @@ get('/custom') { view_file :custom }
 ## POST /custom
 ## Save changes to the custom loaders file.
 post '/custom' do
-  raise "Not allowed" unless allow_write_access?(env)
-  
-  @projects = project_config
   @action   = 'custom'
   @file     = CUSTOM
   @contents = params[:contents]
-  File.open(@file, 'w') { |f| f.write(@contents) }
+  if allow_write_access?(env)
+    File.open(@file, 'w') { |f| f.write(@contents) }
+  else
+    @error = 'You are not authorized to edit this file'
+  end
+  @projects = project_config
   erb :edit
 end
 
@@ -105,6 +109,7 @@ end
 
 # Generic handler for displaying editable files requested using GET.
 def view_file(name)
+  @error    = 'You are not authorized to edit this file' unless allow_write_access?(env)
   @projects = project_config
   @action   = name.to_s
   @file     = Kernel.const_get(name.to_s.upcase)
