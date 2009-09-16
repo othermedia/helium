@@ -62,7 +62,8 @@ post '/config' do
   @contents = params[:contents]
   if allow_write_access?(env)
     begin
-      YAML.load(@contents)
+      data = YAML.load(@contents)
+      raise 'invalid' unless Hash === data
       File.open(@file, 'w') { |f| f.write(@contents) }
     rescue
       @error = 'File not saved: invalid YAML'
