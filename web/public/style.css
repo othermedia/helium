@@ -5,7 +5,7 @@ p { margin: 1.5em 0; }
 .clear { clear: both; font-size: 0; height: 0; overflow: hidden; }
 a { background: #62afcd; color: #fff; text-decoration: none; }
 code { font-size: 80%; }
-pre { font-size: 70%; color: #666; padding: 0 24px; }
+pre { font-size: 70%; font-family: Monaco, Consolas, Lucida Console, monospace; padding: 0 24px; }
 
 .error { background: #fee; border: 1px solid #900; color: #900; padding: 12px; font: bold 13px Helvetica, Arial, sans-serif; }
 
@@ -32,7 +32,7 @@ h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
 .logs li { margin-bottom: 1em; }
 
 .main form { margin: 0; }
-.main textarea { width: 576px; height: 300px; }
+.main textarea { width: 576px; height: 300px; font: 0.8em Monaco, Consolas, Lucida Console, monospace; }
 
 .footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; }
 
