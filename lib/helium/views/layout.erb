@@ -39,7 +39,7 @@
         </li>
       <% end %>
       </ul>
-      <input type="submit" value="Deploy" <%= 'disabled="disabled"' unless allow_write_access?(env) %>>
+      <input type="submit" value="Deploy" <%= disabled? %>>
     <% end %>
   </form>
   

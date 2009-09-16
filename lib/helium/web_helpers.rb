@@ -31,6 +31,11 @@ module Helium
       def h(string)
         ERB::Util.h(string)
       end
+      
+      # Returns a disabled attribute if one is required
+      def disabled?
+        allow_write_access?(env) ? '' : 'disabled="disabled"'
+      end
     end
     
   end
