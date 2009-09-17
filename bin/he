@@ -62,11 +62,9 @@ elsif opts = options[:create]
   
   dir = File.expand_path(name)
   puts "Generating JavaScript project in #{dir}"
+  puts "Edit your dependencies in jake.yml"
+  puts "Change 'example.com' in test/index.html"
   
   Helium.generate('project', dir, :name => name)
-  FileUtils.cd(dir)
-  `git init`
-  `git add .`
-  `git commit -am "Initial commit: new Helium project."`
 end
 

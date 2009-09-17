@@ -6,6 +6,7 @@ bin/he
 lib/helium.rb
 lib/helium/deployer.rb
 lib/helium/generator.rb
+lib/helium/jake.rb
 lib/helium/logger.rb
 lib/helium/trie.rb
 lib/helium/web.rb
@@ -15,8 +16,10 @@ lib/helium/views/index.erb
 lib/helium/views/layout.erb
 templates/packages.js.erb
 templates/project/.gitignore
-templates/project/source/__name__.js.erb
 templates/project/jake.yml.erb
+templates/project/Jakefile
+templates/project/source/__name__.js.erb
+templates/project/test/index.html.erb
 templates/web/access.yml
 templates/web/config.ru
 templates/web/deploy.yml
