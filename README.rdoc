@@ -27,14 +27,14 @@ client project is then:
 
   <!-- Step 1. Load JS.Class and the package listing -->
   <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';</script>
-  <script type="text/javascript" src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js"></script>
-  <script type="text/javascript" src="http://js.example.com/js/packages.js"></script>
+  <script src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
+  <script src="http://js.example.com/js/packages.js" type="text/javascript"></script>
   
   <!-- Step. 2 Set the load path, and declare which branches to use -->
   <script type="text/javascript">
   Helium.PATH = 'http://js.example.com/js';
+  Helium.use('yui', '2.7.0');
   Helium.use('ojay', '0.4.1');
-  Helium.use('panel', 'master');
   </script>
 
 After this, the <tt>require()</tt> function can be used to load any object deployed to
@@ -66,7 +66,7 @@ To install from GitHub:
   rake install_gem
 
 With the gem installed, you can install a copy of the web app anywhere on your system
-using the +he install+ command with the name of the directory to create:
+using the <tt>he install</tt> command with the name of the directory to create:
 
   he install helium-app
 
@@ -93,8 +93,8 @@ To serve this application, just set up an Apache VHost whose +DocumentRoot+ is t
 In addition, the Apache user will need read/write access to <tt>helium-app/deploy.yml</tt> and
 <tt>helium-app/custom.js</tt>, which are editable through the web frontend. The application will
 generate a directory at <tt>helium-app/lib</tt>, which will be used to check out and build
-projects from Git, and will copy any generated JavaScript files to <tt>helium-app/public/js</tt>
--- Apache will need read/write access to these directories.
+projects from Git, and will copy any generated JavaScript files to <tt>helium-app/public/js</tt>;
+Apache will need read/write access to these directories.
 
 
 == Usage
@@ -205,13 +205,13 @@ simple way to load JavaScript objects on demand. To set it up, you just need the
 in the head of your HTML pages:
 
   <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';</script>
-  <script type="text/javascript" src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js"></script>
-  <script type="text/javascript" src="http://js.example.com/js/packages.js"></script>
+  <script src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
+  <script src="http://js.example.com/js/packages.js" type="text/javascript"></script>
   
   <script type="text/javascript">
   Helium.PATH = 'http://js.example.com/js';
+  Helium.use('yui', '2.7.0');
   Helium.use('ojay', '0.4.1');
-  Helium.use('panel', 'master');
   </script>
 
 To explain the above code: we set the special variable +JSCLASS_PATH+ to tell JS.Class where
