@@ -12,25 +12,57 @@ spec = Oyster.spec do
   
   description <<-EOS
     Helium is a web application for deploying and serving versioned copies of
-    JavaScript libraries from Git repositories. The 'he' command installs the
-    application to a local directory, ready for serving through Passenger.
+    JavaScript libraries from Git repositories. It uses Jake to build libraries
+    and extract dependency data that is used to generate a JS.Packages manifest.
   EOS
   
-  synopsis 'he DIRECTORY'
+  subcommand :install do
+    synopsis 'he install DIRECTORY'
+    
+    description <<-EOS
+      Installs a copy of the Helium web application in the given directory.
+      Set up an Apache VHost with the DocumentRoot pointing to DIRECTORY/public
+      to serve the app through Phusion Passenger.
+    EOS
+  end
+  
+  subcommand :create do
+    synopsis 'he create NAME'
+    
+    description <<-EOS
+      Creates a new JavaScript project with the given name, containing a stub
+      library file, a jake.yml config file and support code for generating
+      local package listings and running tests.
+    EOS
+  end
 end
 
 begin; options = spec.parse
 rescue; exit
 end
 
-dir = options[:unclaimed].first
-if dir.nil?
-  puts "Installation directory required -- type `he --help` for more info"
-  exit
+if opts = options[:install]
+  dir = opts[:unclaimed].first
+  if dir.nil?
+    puts "Installation directory required -- type `he install --help` for more info"
+    exit
+  end
+  
+  dir = File.expand_path(dir)
+  puts "Installing Helium app in #{dir}"
+  
+  Helium.generate('web', dir)
+
+elsif opts = options[:create]
+  name = opts[:unclaimed].first
+  if name.nil?
+    puts "Project name requires -- type `he create --help` for more info"
+    exit
+  end
+  
+  dir = File.expand_path(name)
+  puts "Generating JavaScript project in #{dir}"
+  
+  Helium.generate('project', dir, :name => name)
 end
-
-dir = File.expand_path(dir)
-puts "Installing Helium app in #{dir}"
-
-FileUtils.cp_r(File.join(home, 'web'), dir)
 

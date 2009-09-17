@@ -113,7 +113,7 @@ module Helium
       end
       
       # Generate JS.Packages dependency file from ERB template and compress the result
-      template = File.read(join(ROOT, JS_CONFIG_TEMPLATE))
+      template = File.read(JS_CONFIG_TEMPLATE)
       code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
       packed   = Packr.pack(code, :shrink_vars => true)
         

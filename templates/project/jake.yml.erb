@@ -1,0 +1,23 @@
+---
+source_directory:     source
+build_directory:      build
+layout:               together
+
+builds:
+  src:
+    packer:           false
+    suffix:           false
+  min:
+    shrink_vars:      true
+    private:          false
+
+packages:
+  <%= @name %>:
+    files:
+      - <%= @name %>
+    meta:
+      requires:
+        - JS.Class
+      provides:
+        - <%= camelize(@name) %>
+

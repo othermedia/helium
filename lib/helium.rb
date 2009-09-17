@@ -14,15 +14,20 @@ module Helium
   
   VERSION = '0.1.0'
   
-  ROOT          = File.dirname(__FILE__)
+  ROOT          = File.expand_path(File.dirname(__FILE__))
+  TEMPLATES     = File.join(ROOT, '..', 'templates')
+  ERB_EXT       = '.erb'
+  JS_CONFIG_TEMPLATE = File.join(TEMPLATES, 'packages.js.erb')
+  
   CONFIG_FILE   = 'deploy.yml'
   REPOS         = 'repos'
   STATIC        = 'static'
-  JS_CONFIG_TEMPLATE = 'packages.js.erb'
   PACKAGES      = 'packages-src.js'
   PACKAGES_MIN  = 'packages.js'
+  
   GIT           = '.git'
   HEAD          = 'HEAD'
+  
   JAKE_FILE     = Jake::CONFIG_FILE
   
   SEP  = File::SEPARATOR
@@ -30,9 +35,13 @@ module Helium
   
   ERB_TRIM_MODE = '-'
   
-  require File.join(ROOT, 'helium', 'trie')
-  require File.join(ROOT, 'helium', 'deployer')
-  require File.join(ROOT, 'helium', 'logger')
+  %w[trie deployer generator logger].each do |file|
+    require File.join(ROOT, 'helium', file)
+  end
+  
+  def self.generate(template, dir, options = {})
+    Generator.new(template, dir, options).run!
+  end
   
 end
 
