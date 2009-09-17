@@ -66,9 +66,9 @@ To install from GitHub:
   rake install_gem
 
 With the gem installed, you can install a copy of the web app anywhere on your system
-using the +he+ command with the name of the directory to create:
+using the +he install+ command with the name of the directory to create:
 
-  he helium-app
+  he install helium-app
 
 This will give you the following files:
 
@@ -117,10 +117,12 @@ in its metadata. For example, here's a <tt>jake.yml</tt> file for the +Panel+ pa
   source_directory:   .
   build_directory:    .
   layout:             together
+  
   builds:
     min:
       shrink_vars:    true
       private:        true
+  
   packages:
     panel:
       files:
@@ -144,6 +146,20 @@ you like for this build, and the project may contain any number of packages. See
 Note that objects listed under +provides+ and +requires+ should be the runtime reference
 names of JavaScript objects, and anything in the +requires+ list should be provided by
 some other package known to the deploy system.
+
+If you're starting a new project, Helium comes with a command line tool that generates
+some stub code, a <tt>jake.yml</tt> file and a test page. Just run the following to
+create a new project, replacing <tt>project-name</tt> with the name of your library.
+
+  he create project-name
+
+After generating a project, you will need to edit its dependencies in <tt>jake.yml</tt>
+and edit <tt>test/index.html</tt> to reference your Helium server so that dependencies
+can be loaded.
+
+Running +jake+ from the new project directory will build the library for you and generate
+a JS.Packages manifest for it. The test page uses <tt>require()</tt> to load your library,
+so you'll know if any of its dependency data is missing.
 
 === The deployment process
 

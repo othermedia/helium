@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+
 home = File.join(File.dirname(__FILE__), '..')
 
 require 'fileutils'
