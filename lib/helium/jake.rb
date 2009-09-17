@@ -1,5 +1,6 @@
 LIB = 'lib'
-TEST_DIR = File.join(PROJECT_DIR, 'test', LIB)
+TEST_DIR = File.join(PROJECT_DIR, 'test')
+LIB_DIR = File.join(TEST_DIR, LIB)
 
 def list(array)
   (array || []).map { |s| s.inspect } * ', '
@@ -26,11 +27,10 @@ jake_hook(:file_created, &update)
 jake_hook(:file_not_changed, &update)
 
 jake_hook :build_complete do |build|
-  FileUtils.rm_rf(TEST_DIR) if File.exists?(TEST_DIR)
+  FileUtils.rm_rf(LIB_DIR) if File.exists?(LIB_DIR)
   
   files.each do |path, meta|
-    target = File.join(TEST_DIR, path)
-    puts target
+    target = File.join(LIB_DIR, path)
     FileUtils.mkdir_p(File.dirname(target))
     FileUtils.cp(File.join(build.build_directory, path), target)
   end
