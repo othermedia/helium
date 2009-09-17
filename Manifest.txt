@@ -11,6 +11,7 @@ lib/helium/logger.rb
 lib/helium/trie.rb
 lib/helium/web.rb
 lib/helium/web_helpers.rb
+lib/helium/views/deploy.erb
 lib/helium/views/edit.erb
 lib/helium/views/index.erb
 lib/helium/views/layout.erb

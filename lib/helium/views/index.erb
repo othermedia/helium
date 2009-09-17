@@ -1,38 +1,24 @@
-<%if @log %>
-  <h2>Deploy logs</h2>
-  <ul class="logs">
-  <% @log.each do |msg| %>
-    <li><%=h msg %></li>
-  <% end %>
-  </ul>
-  
-<% elsif @error %>
-  <h2>Deployment error</h2>
-  
-  <p class="error"><%=h @error %></p>
-  
-<% else%>
-  <h2>Helium, the JavaScript package server</h2>
-  
-  <p>Helium deploys versioned copies of JavaScript libraries from Git repositories,
-  using <a href="http://github.com/jcoglan/jake">Jake</a> to generate package listings
-  for use with <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>. It
-  provides a central server from which JavaScript objects can be loaded on-demand, and
-  handles dependency resolution automatically using metadata stored in each library&rsquo;s
-  Git repo.</p>
-  
-  <p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
-  For example:</p>
-  
-  <pre>---
+<h2>Helium, the JavaScript package server</h2>
+
+<p>Helium deploys versioned copies of JavaScript libraries from Git repositories,
+using <a href="http://github.com/jcoglan/jake">Jake</a> to generate package listings
+for use with <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>. It
+provides a central server from which JavaScript objects can be loaded on-demand, and
+handles dependency resolution automatically using metadata stored in each library&rsquo;s
+Git repo.</p>
+
+<p>To get started, <a href="/config">add some projects to deploy</a> in YAML format.
+For example:</p>
+
+<pre>---
 js.class:     git://github.com/jcoglan/js.class.git
 yui:          git://github.com/othermedia/yui.git
 ojay:         git://github.com/othermedia/ojay.git</pre>
-  
-  <p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
-  not deployed using Helium. For example the following are loaders for Google Maps:</p>
-  
-  <pre class="prettyprint">loader(function(cb) {
+
+<p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
+not deployed using Helium. For example the following are loaders for Google Maps:</p>
+
+<pre class="prettyprint">loader(function(cb) {
     var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
     load(url, cb);
 })  .provides('google.load');
@@ -41,11 +27,11 @@ loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
     .provides('GMap2', 'GClientGeocoder',
               'GEvent', 'GLatLng', 'GMarker')
     .requires('google.load');</pre>
-  
-  <p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>
-  section of your pages to set up the package manager:</p>
-  
-  <pre class="prettyprint">&lt;script type="text/javascript">
+
+<p>Integrate Helium with your web sites by adding the following to the <code>HEAD</code>
+section of your pages to set up the package manager:</p>
+
+<pre class="prettyprint">&lt;script type="text/javascript">
 JSCLASS_PATH = 'http://localhost:9292/js/js.class/2.1.x/build/min';&lt;/script>
 
 &lt;script src="http://localhost:9292/js/js.class/2.1.x/build/min/loader.js"
@@ -58,11 +44,11 @@ Helium.PATH = 'http://<%=h @domain %>/js';
 Helium.use('yui', '2.7.0');
 Helium.use('ojay', '0.4.1');
 &lt;/script></pre>
-  
-  <p>Use the <code>require()</code> function throughout your pages to load JavaScript
-  objects on demand. Dependencies are automatically handled for you:</p>
-  
-  <pre class="prettyprint">&lt;script type="text/javascript">
+
+<p>Use the <code>require()</code> function throughout your pages to load JavaScript
+objects on demand. Dependencies are automatically handled for you:</p>
+
+<pre class="prettyprint">&lt;script type="text/javascript">
 require('GMap2', 'YAHOO.util.Selector', function() {
     
     var box   = document.getElementById('mapview'),
@@ -72,5 +58,4 @@ require('GMap2', 'YAHOO.util.Selector', function() {
     // &amp;c.
 });
 &lt;/script></pre>
-<% end %>
 

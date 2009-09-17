@@ -56,7 +56,7 @@ module Helium
       else
         @error = 'You are not authorized to run deployments'
       end
-      erb :index
+      erb :deploy
     end
     
     get('/config') { view_file :config }
