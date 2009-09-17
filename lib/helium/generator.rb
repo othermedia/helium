@@ -31,10 +31,10 @@ module Helium
       Find.find(@_source) do |path|
         next unless file?(path)
         content = read(path)
-        target  = join(@_directory, path.sub(@_source, ''))
         
         # Replace variable names in file paths
-        target.gsub!(/__([^_]+)__/) { instance_variable_get("@#{$1}") }
+        path = path.sub(@_source, '').gsub(/__(.+?)__/) { instance_variable_get("@#{$1}") }
+        target = join(@_directory, path)
         
         # Evaluate using ERB if required
         if extname(path) == ERB_EXT
