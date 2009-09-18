@@ -18,11 +18,20 @@ ojay:         git://github.com/othermedia/ojay.git</pre>
 <p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
 not deployed using Helium. For example the following are loaders for Google Maps:</p>
 
-<pre class="prettyprint">loader(function(cb) {
-    var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_KEY;
+<pre class="prettyprint">/**
+ * Loads the `google.load` function, required to load other
+ * parts of the Google API. Requires `Helium.GOOGLE_API_KEY`
+ * to be set beforehand.
+ **/
+loader(function(cb) {
+    var url = 'http://www.google.com/jsapi?key=' + Helium.GOOGLE_API_KEY;
     load(url, cb);
 })  .provides('google.load');
 
+/**
+ * Loads the Google Maps API. Requires `Helium.GOOGLE_API_KEY`
+ * to be set beforehand.
+ **/
 loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
     .provides('GMap2', 'GClientGeocoder',
               'GEvent', 'GLatLng', 'GMarker')
