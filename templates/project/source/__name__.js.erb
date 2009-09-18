@@ -2,11 +2,13 @@
  * class <%= camelize(@name) %>
  **/
 <%= camelize(@name) %> = new JS.Class('<%= camelize(@name) %>', {
-  extend: {
-    VERSION: '1.0.0'
-  },
-  
-  initialize: function() {
-  }
+    extend: {
+        VERSION: '1.0.0'
+    },
+    
+    /**
+     * new <%= camelize(@name) %>()
+     **/
+    initialize: function() {}
 });
 
