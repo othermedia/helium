@@ -15,7 +15,7 @@ module Helium
     CONFIG   = File.join(APP_DIR, 'deploy.yml')
     CUSTOM   = File.join(APP_DIR, 'custom.js')
     ACCESS   = File.join(APP_DIR, 'access.yml')
-    PUBLIC   = File.join(APP_DIR, 'public', 'js')
+    PUBLIC   = File.join(APP_DIR, 'public', WEB_ROOT)
     
     set :static, true
     set :public, File.join(APP_DIR, 'public')
@@ -42,7 +42,7 @@ module Helium
         end
         
         custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
-        files = deployer.run_builds!(:custom => custom)
+        files = deployer.run_builds!(:custom => custom, :domain => @domain)
         
         FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
         

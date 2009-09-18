@@ -6,14 +6,12 @@
     
     <!-- FIXME replace example.com with your Helium server -->
     <script type="text/javascript">
-    JSCLASS_PATH = 'http://example.com/js/js.class/2.1.x/build/min';</script>
+    JSCLASS_PATH = 'http://example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min';</script>
     
-    <script src="http://example.com/js/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
-    <script src="http://example.com/js/packages.js" type="text/javascript"></script>
+    <script src="http://example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
+    <script src="http://example.com/<%= WEB_ROOT %>/packages.js" type="text/javascript"></script>
     
     <script type="text/javascript">
-    Helium.PATH = 'http://example.com/js';
-    
     // FIXME declare which remote branches to use
     // Helium.use('yui', '2.7.0');
     </script>

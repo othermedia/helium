@@ -84,6 +84,7 @@ module Helium
     def run_builds!(options = {})
       @tree    = Trie.new
       @custom  = options[:custom]
+      @domain  = options[:domain]
       manifest = []
       
       # Loop over checked-out projects. Skip directories with no Jake file.

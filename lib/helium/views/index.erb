@@ -41,16 +41,14 @@ loader(function(cb) { google.load('maps', '2.x', {callback: cb}) })
 section of your pages to set up the package manager:</p>
 
 <pre class="prettyprint">&lt;script type="text/javascript">
-JSCLASS_PATH = 'http://localhost:9292/js/js.class/2.1.x/build/min';&lt;/script>
+JSCLASS_PATH = 'http://localhost:9292/<%= Helium::WEB_ROOT %>/js.class/2.1.x/build/min';&lt;/script>
 
-&lt;script src="http://localhost:9292/js/js.class/2.1.x/build/min/loader.js"
+&lt;script src="http://localhost:9292/<%= Helium::WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"
         type="text/javascript">&lt;/script>
-&lt;script src="http://localhost:9292/js/packages.js"
+&lt;script src="http://localhost:9292/<%= Helium::WEB_ROOT %>/packages.js"
         type="text/javascript">&lt;/script>
 
 &lt;script type="text/javascript">
-Helium.PATH = 'http://<%=h @domain %>/js';
-
 // Specify which branch/tag of each Git project to use
 Helium.use('yui', '2.7.0');
 Helium.use('ojay', '0.4.1');

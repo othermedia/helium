@@ -6,13 +6,12 @@
  * then use the `require()` function to load objects on demand.
  * 
  *     <!-- Step 1. Load JS.Class and the package listing -->
- *     <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/js/js.class/2.1.x/build/min';</script>
- *     <script type="text/javascript" src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js"></script>
- *     <script type="text/javascript" src="http://js.example.com/js/packages.js"></script>
+ *     <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min';</script>
+ *     <script type="text/javascript" src="http://js.example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"></script>
+ *     <script type="text/javascript" src="http://js.example.com/<%= WEB_ROOT %>/packages.js"></script>
  *     
- *     <!-- Step. 2 Set the load path, and declare which branches to use -->
+ *     <!-- Step. 2 Declare which branches to use -->
  *     <script type="text/javascript">
- *     Helium.PATH = 'http://js.example.com/js';
  *     Helium.use('yui', '2.7.0');
  *     Helium.use('ojay', '0.4.1');
  *     </script>
@@ -67,6 +66,11 @@ JS.Packages(function() { with(this) {
     };
     
     window.Helium = window.Helium || {};
+    
+<% if @domain -%>
+    var protocol = ("https:" == document.location.protocol) ? "https:" : "http:";
+    Helium.PATH = protocol + "//<%= @domain %>/<%= WEB_ROOT %>";
+<% end -%>
     
     /**
      * Helium.use(project, branch) -> undefined

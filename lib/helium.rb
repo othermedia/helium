@@ -24,6 +24,7 @@ module Helium
   STATIC        = 'static'
   PACKAGES      = 'packages-src.js'
   PACKAGES_MIN  = 'packages.js'
+  WEB_ROOT      = 'js'
   
   GIT           = '.git'
   HEAD          = 'HEAD'
