@@ -1,10 +1,9 @@
 /**
  * Loads the `_gat` object for Google Analytics
  **/
-loader(function(cb) {
-    var gaJsHost = ("https:" == document.location.protocol) ? "https://ssl." : "http://www.";
-    load(gaJsHost + 'google-analytics.com/ga.js', cb);
-})  .provides('_gat');
+var gaJsHost = ('https:' == document.location.protocol) ? 'https://ssl.' : 'http://www.';
+file(gaJsHost + 'google-analytics.com/ga.js')
+    .provides('_gat');
 
 /**
  * Loads a `pageTracker` object for making Analytics API calls.
