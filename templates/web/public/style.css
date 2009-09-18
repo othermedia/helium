@@ -15,7 +15,7 @@ pre { font-size: 70%; font-family: Monaco, Consolas, Lucida Console, monospace; 
 
 h1 { margin: 0 0 24px -48px; _margin-left: -24px; float: left; width: 328px; }
 h1 a { font-size: 72px; background: #c4e510; color: #fff; text-decoration: none; display: block; padding: 0 24px 0 48px; }
-h1 .tagline { font: italic 15px Times New Roman, serif; display: block; padding: 8px 24px 0 48px; }
+h1 .tagline { font-style: italic; font-weight: normal; font-size: 14px; display: block; padding: 8px 24px 0 48px; }
 
 .navigation { float: left; margin: 0; padding: 0; }
 .navigation li { list-style: none; float: left; margin: 0 0 0 60px; _margin: 0 0 0 30px; padding: 0; width: 220px; }
@@ -35,6 +35,6 @@ h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
 .main form { margin: 0; }
 .main textarea { width: 576px; height: 300px; font: 0.8em Monaco, Consolas, Lucida Console, monospace; }
 
-.footer { border-top: 1px solid #ccc; margin: 80px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; position: relative; }
+.footer { border-top: 1px solid #ccc; margin: 24px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; position: relative; }
 .footer .logo { position: absolute; left: 48px; top: 20px; margin: 0; font-size: 120%; color: #888; }
 
