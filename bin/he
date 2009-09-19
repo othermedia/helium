@@ -81,7 +81,9 @@ if opts = options[:install]
   puts "\nInstalling Helium app in #{dir}..."
   Helium.generate('web', dir)
   
-  puts "\n... done, now run `rackup #{d}/config.ru` to start the app.\n\n"
+  puts "\n... done, now set up your webserver to serve the app:\n\n"
+  puts "  * Point Apache at #{d}/public to serve using Passenger"
+  puts "  * Run `rackup #{d}/config.ru` to run it locally\n\n"
 
 elsif opts = options[:create]
   name = opts[:unclaimed].first
