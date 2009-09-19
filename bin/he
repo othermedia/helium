@@ -17,7 +17,20 @@ spec = Oyster.spec do
   description <<-EOS
     Helium is a web application for deploying and serving versioned copies of
     JavaScript libraries from Git repositories. It uses Jake to build libraries
-    and extract dependency data that is used to generate a JS.Packages manifest.
+    and extract dependency data, generating a manifest for JS.Packages so that
+    client sites can load objects from Helium on demand.
+    
+    The following command line tools are available; run each one with `--help`
+    for more information.
+    
+    `he install` creates a copy of the web frontend that you can serve using
+    Rack and Passenger.
+    
+    `he create` generates a stub JavaScript project with all the files required
+    for Helium to deploy it.
+    
+    `he serve` starts a web server to serve static files from any directory,
+    useful for testing code that requires a domain name to function.
   EOS
   
   subcommand :install do
