@@ -6,6 +6,7 @@ require 'fileutils'
 require 'rubygems'
 require 'oyster'
 require 'jake'
+require 'rack'
 
 require File.join(home, 'lib', 'helium')
 
@@ -36,6 +37,16 @@ spec = Oyster.spec do
       Creates a new JavaScript project with the given name, containing a stub
       library file, a jake.yml config file and support code for generating
       local package listings and running tests.
+    EOS
+  end
+  
+  subcommand :serve do
+    synopsis 'he serve DIRECTORY'
+    
+    description <<-EOS
+      Starts a webserver on port 8000 that serves the given directory over HTTP.
+      Useful for testing pages that require Ajax or services with domain specific
+      API keys like Google Maps.
     EOS
   end
 end
@@ -83,5 +94,16 @@ elsif opts = options[:create]
   puts "  * We've added generated files to your .gitignore"
   puts "  * Keep your dependencies up-to-date in jake.yml"
   puts "  * Point test/index.html at your Helium server and write some tests!\n\n"
+
+elsif opts = options[:serve]
+  dir = File.expand_path(opts[:unclaimed].first || '.')
+  app = Rack::File.new(dir)
+  
+  server = %w[thin mongrel webrick].map { |name|
+    Rack::Handler.get(name) rescue nil
+  }.compact.first
+  
+  puts "Serving contents of #{dir} on port 8000..."
+  server.run(app, :Port => 8000)
 end
 
