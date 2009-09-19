@@ -117,7 +117,8 @@ module Helium
       template = File.read(JS_CONFIG_TEMPLATE)
       code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
       packed   = Packr.pack(code, :shrink_vars => true)
-        
+      
+      mkdir_p(static_dir)
       File.open(static_dir(PACKAGES), 'w') { |f| f.write(code) }
       File.open(static_dir(PACKAGES_MIN), 'w') { |f| f.write(packed) }
       
