@@ -125,9 +125,22 @@ module Helium
       manifest + [PACKAGES, PACKAGES_MIN]
     end
     
+    # Removes any repositories and static files for projects not listed in the the
+    # `deploy.yml` file.
+    def cleanup!
+      [repo_dir, static_dir].each do |dir|
+        (Dir.entries(dir) - %w[. ..]).each do |entry|
+          path = join(dir, entry)
+          next unless File.directory?(path)
+          rm_rf(path) unless @config.has_key?(entry)
+        end
+      end
+    end
+    
     # Returns the path to the Git repository for a given project.
-    def repo_dir(project)
-      join(@output_dir, REPOS, project)
+    def repo_dir(project = nil)
+      path = [@output_dir, REPOS, project].compact
+      join(*path)
     end
     
     # Returns the path to the static export directory for a given project and branch.

@@ -47,6 +47,8 @@ module Helium
           deployer.deploy!(name, false)
         end
         
+        deployer.cleanup!
+        
         custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
         files = deployer.run_builds!(:custom => custom, :domain => @domain)
         
