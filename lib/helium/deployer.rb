@@ -137,6 +137,13 @@ module Helium
       
   private
     
+    # Returns +true+ iff the set of files contains any dependency data.
+    def has_manifest?(config)
+      Trie === config ?
+          config.any? { |path, conf| has_manifest?(conf) } :
+          config.has_key?(:provides)
+    end
+    
     # Notifies observers by sending a log message.
     def log(*args)
       changed(true)

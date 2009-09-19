@@ -6,9 +6,9 @@
  * then use the `require()` function to load objects on demand.
  * 
  *     <!-- Step 1. Load JS.Class and the package listing -->
- *     <script type="text/javascript">JSCLASS_PATH = 'http://js.example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min';</script>
- *     <script type="text/javascript" src="http://js.example.com/<%= WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"></script>
- *     <script type="text/javascript" src="http://js.example.com/<%= WEB_ROOT %>/packages.js"></script>
+ *     <script type="text/javascript">JSCLASS_PATH = 'http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/js.class/2.1.x/build/min';</script>
+ *     <script type="text/javascript" src="http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"></script>
+ *     <script type="text/javascript" src="http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/packages.js"></script>
  *     
  *     <!-- Step. 2 Declare which branches to use -->
  *     <script type="text/javascript">
@@ -28,24 +28,19 @@ JS.Packages(function() { with(this) {
 
 <% @tree.each_child do |project, branches| -%>
 
-    /**
-     * Manifest for project '<%= project %>'
-     **/
     BRANCHES['<%= project %>'] = {};
 <% branches.each_child do |branch, files| -%>
+<% next unless has_manifest?(files) -%>
 
-    /**
-     * Manifest for project '<%= project %>', branch '<%= branch %>'
-     **/
     current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
 <% files.each do |path, config| -%>
-<% next unless config[:provides] -%>
+<% next unless has_manifest?(config) -%>
 
     /**
      * Manifest for project '<%= project %>', branch '<%= branch %>'
-     * File: '<%= path * '/' %>'
+     * File: '<%= path.first %>'
      **/
-    pathname = current['<%= path * '/' %>'] = {};
+    pathname = current['<%= path.first %>'] = {};
     pathname.p = <%= (config[:provides] || []).inspect %>;
     pathname.r = <%= (config[:requires] || []).inspect %>;
     pathname.u = <%= (config[:uses] || []).inspect %>;
