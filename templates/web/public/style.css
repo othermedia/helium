@@ -35,6 +35,6 @@ h2 { font-size: 150%; font-weight: normal; margin: 0 0 24px; }
 .main form { margin: 0; }
 .main textarea { width: 576px; height: 300px; font: 0.8em Monaco, Consolas, Lucida Console, monospace; }
 
-.footer { border-top: 1px solid #ccc; margin: 24px -48px; _margin: 40px -48px; padding: 24px 48px 80px 328px; font-size: 90%; position: relative; }
+.footer { clear: both; border-top: 1px solid #ccc; margin: 24px -48px; _margin: 12px -48px; padding: 24px 48px 80px 328px; font-size: 90%; position: relative; zoom: 1; }
 .footer .logo { position: absolute; left: 48px; top: 20px; margin: 0; font-size: 120%; color: #888; }
 
