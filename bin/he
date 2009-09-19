@@ -5,6 +5,7 @@ home = File.join(File.dirname(__FILE__), '..')
 require 'fileutils'
 require 'rubygems'
 require 'oyster'
+require 'jake'
 
 require File.join(home, 'lib', 'helium')
 
@@ -51,22 +52,36 @@ if opts = options[:install]
   end
   
   dir = File.expand_path(dir)
-  puts "Installing Helium app in #{dir}"
+  d = File.basename(dir)
   
+  puts "\nInstalling Helium app in #{dir}..."
   Helium.generate('web', dir)
+  
+  puts "\n... done, now run `rackup #{d}/config.ru` to start the app.\n\n"
 
 elsif opts = options[:create]
   name = opts[:unclaimed].first
   if name.nil?
-    puts "Project name requires -- type `he create --help` for more info"
+    puts "Project name required -- type `he create --help` for more info"
     exit
   end
   
   dir = File.expand_path(name)
-  puts "Generating JavaScript project in #{dir}"
-  puts "Edit your dependencies in jake.yml"
-  puts "Change 'example.com' in test/index.html"
+  d = File.basename(dir)
   
+  puts "\nGenerating JavaScript project in #{dir}..."
   Helium.generate('project', dir, :name => name)
+  
+  puts "\nBuilding project using Jake..."
+  jake_hook(:file_created) do |build, package, type, path|
+    puts "create #{d}#{ path.sub(dir, '') }"
+  end
+  Jake.build!(dir)
+  
+  puts "\n... done, now your new JavaScript project is ready.\n\n"
+  puts "  * Build your project by running `jake` in the root directory"
+  puts "  * We've added generated files to your .gitignore"
+  puts "  * Keep your dependencies up-to-date in jake.yml"
+  puts "  * Point test/index.html at your Helium server and write some tests!\n\n"
 end
 

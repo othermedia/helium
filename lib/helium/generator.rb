@@ -45,6 +45,7 @@ module Helium
         # Generate destination file
         FileUtils.mkdir_p(dirname(target))
         open(target, 'w') { |f| f.write(content) }
+        puts "create #{ basename(@_directory) }#{ target.sub(@_directory, '') }"
       end
     end
     
