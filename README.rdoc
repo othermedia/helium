@@ -30,7 +30,7 @@ client project is then:
   <script src="http://js.example.com/js/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
   <script src="http://js.example.com/js/packages.js" type="text/javascript"></script>
   
-  <!-- Step. 2 Declare which branches to use -->
+  <!-- Step 2. Declare which branches to use -->
   <script type="text/javascript">
   Helium.use('yui', '2.7.0');
   Helium.use('ojay', '0.4.1');
