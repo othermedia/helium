@@ -29,6 +29,12 @@ module Helium
     ## Home page -- just loads the project list and renders.
     get('/') { erb :index }
     
+    ## Rendered if a missing script file is requested.
+    get "/#{WEB_ROOT}/*" do
+      @path = params[:splat].first
+      halt 404, erb(:missing)
+    end
+    
     ## Deploys all selected projects and renders a list of log messages.
     post '/deploy' do
       if allow_write_access?(env)

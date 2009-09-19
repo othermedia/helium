@@ -15,6 +15,7 @@ lib/helium/views/deploy.erb
 lib/helium/views/edit.erb
 lib/helium/views/index.erb
 lib/helium/views/layout.erb
+lib/helium/views/missing.erb
 templates/packages.js.erb
 templates/project/.gitignore
 templates/project/jake.yml.erb
