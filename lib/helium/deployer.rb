@@ -49,7 +49,7 @@ module Helium
       else
         url = @config[project]
         log :git_clone, "Cloning Git repo #{ url } into #{ dir }"
-        `git clone #{ url } #{ dir }`
+        `git clone #{ url } "#{ dir }"`
       end
     end
     
@@ -63,7 +63,7 @@ module Helium
       mkdir_p(static_dir(project))
       
       branches.each do |branch|
-        name   = branch.name.split(SEP).last
+        name = branch.name.split(SEP).last
         next if HEAD == name
         
         target = static_dir(project, name)
