@@ -16,6 +16,7 @@ module Helium
     CUSTOM   = File.join(APP_DIR, 'custom.js')
     ACCESS   = File.join(APP_DIR, 'access.yml')
     PUBLIC   = File.join(APP_DIR, 'public', WEB_ROOT)
+    LOCK     = File.join(APP_DIR, '.lock')
     
     set :static, true
     set :public, File.join(APP_DIR, 'public')
@@ -37,7 +38,15 @@ module Helium
     
     ## Deploys all selected projects and renders a list of log messages.
     post '/deploy' do
-      if allow_write_access?(env)
+      if not allow_write_access?(env)
+        @error = 'You are not authorized to run deployments'
+      elsif locked?
+        @error = 'Deployment already in progress'
+      end
+      
+      halt(200, erb(:deploy)) if @error
+      
+      with_lock do
         deployer = Helium::Deployer.new(APP_DIR, LIB_DIR)
         logger   = Helium::Logger.new
         deployer.add_observer(logger)
@@ -61,10 +70,8 @@ module Helium
         end
         
         @log = logger.messages.map { |msg| msg.sub(File.join(APP_DIR, LIB_DIR), '') }
-      else
-        @error = 'You are not authorized to run deployments'
+        erb :deploy
       end
-      erb :deploy
     end
     
     get('/config') { view_file :config }

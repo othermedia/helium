@@ -17,6 +17,21 @@ module Helium
         allowed_ips.include?(env['REMOTE_ADDR'])
       end
       
+      # Returns +true+ if a lock exists stopping other deploy processes running.
+      def locked?
+        File.file?(LOCK)
+      end
+      
+      # Places a lock in the filesystem while running a code block. This is
+      # used to make sure no more than one deploy process runs at once.
+      def with_lock(&block)
+        File.open(LOCK, 'w') { |f| f.write(Time.now.to_s) }
+        at_exit { File.delete(LOCK) if File.exists?(LOCK) }
+        result = block.call
+        File.delete(LOCK) if File.exists?(LOCK)
+        result
+      end
+      
       # Generic handler for displaying editable files requested using GET.
       def view_file(name)
         @error    = 'You are not authorized to edit this file' unless allow_write_access?(env)
