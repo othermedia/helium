@@ -129,6 +129,7 @@ module Helium
     # `deploy.yml` file.
     def cleanup!
       [repo_dir, static_dir].each do |dir|
+        next unless File.directory?(dir)
         (Dir.entries(dir) - %w[. ..]).each do |entry|
           path = join(dir, entry)
           next unless File.directory?(path)
