@@ -1,6 +1,12 @@
 LIB = 'lib'
-TEST_DIR = File.join(PROJECT_DIR, 'test')
-LIB_DIR = File.join(TEST_DIR, LIB)
+
+TEST_DIR   = File.join(PROJECT_DIR, 'test')
+PUBLIC_DIR = File.join(TEST_DIR, 'public')
+
+# If test/public exists, we generate files there. Otherwise
+# we just put generated files in the test directory.
+TARGET_DIR = File.directory?(PUBLIC_DIR) ? PUBLIC_DIR : TEST_DIR
+LIB_DIR    = File.join(TARGET_DIR, LIB)
 
 def list(array)
   (array || []).map { |s| s.inspect } * ', '
@@ -36,6 +42,6 @@ jake_hook :build_complete do |build|
   end
   
   packages = PACKAGES.result(binding)
-  File.open(File.join(TEST_DIR, 'packages.js'), 'w') { |f| f.write(packages) }
+  File.open(File.join(TARGET_DIR, 'packages.js'), 'w') { |f| f.write(packages) }
 end
 
