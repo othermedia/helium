@@ -12,6 +12,10 @@ def list(array)
   (array || []).map { |s| s.inspect } * ', '
 end
 
+def short_path(path)
+  path.sub(PROJECT_DIR, '.')
+end
+
 PACKAGES = ERB.new(<<-EOS, nil, '-')
 JS.Packages(function() { with(this) {
 <% files.each do |path, meta| %>
@@ -36,12 +40,16 @@ jake_hook :build_complete do |build|
   FileUtils.rm_rf(LIB_DIR) if File.exists?(LIB_DIR)
   
   files.each do |path, meta|
+    source = File.join(build.build_directory, path)
     target = File.join(LIB_DIR, path)
     FileUtils.mkdir_p(File.dirname(target))
-    FileUtils.cp(File.join(build.build_directory, path), target)
+    puts "Copying #{ short_path(source) } --> #{ short_path(target) }"
+    FileUtils.cp(source, target)
   end
   
   packages = PACKAGES.result(binding)
-  File.open(File.join(TARGET_DIR, 'packages.js'), 'w') { |f| f.write(packages) }
+  pkg_file = File.join(TARGET_DIR, 'packages.js')
+  puts "Writing package listing to #{ short_path(pkg_file) }"
+  File.open(pkg_file, 'w') { |f| f.write(packages) }
 end
 
