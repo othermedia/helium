@@ -96,7 +96,7 @@ module Helium
         # Event listener to capture file information from Jake
         hook = lambda do |build, package, build_type, file|
           if build_type == :min
-            file = file.gsub(/\/(\.?\/)*/, SEP).sub(path, '')
+            file = file.sub(path, '')
             manifest << join(project, branch, file)
             key = [project, branch, file]
             @tree[key] = package.meta
