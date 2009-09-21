@@ -19,9 +19,11 @@
 JS.Packages(function() { with(this) {
 
 <% if @custom -%>
-/*--- User-defined loader code ---*/
+/*--- User-defined loader functions ------------------------------*/
+
 <%= @custom -%>
-/*--------------------------------*/
+
+/*----------------------------------------------------------------*/
 <% end -%>
 
     var BRANCHES = {}, current, pathname;
@@ -86,10 +88,14 @@ JS.Packages(function() { with(this) {
         var projectBranches = BRANCHES[project];
         if (!projectBranches) throw "Could not find project '" + project + "'";
         
+        if (typeof projectBranches === "string")
+            throw "Project '" + project + "' is already using branch '" + projectBranches + "'";
+        
         var pkg = projectBranches[branch];
         if (!pkg) throw "Could not find branch '" + branch + "' of project '" + project + "'";
         
         log("Using '" + project + "', version: '" + branch + "'");
+        BRANCHES[project] = branch;
         
         var path, config, builder;
         
