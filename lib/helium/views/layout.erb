@@ -28,7 +28,7 @@
     <div class="clear"></div>
   </div>
   
-  <form action="/deploy" method="post">
+  <form action="/app/deploy" method="post">
     <% unless @projects.empty? %>
       <ul class="projects">
       <% @projects.keys.sort.each_with_index do |name, i| %>
