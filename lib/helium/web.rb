@@ -37,7 +37,7 @@ module Helium
     end
     
     ## Deploys all selected projects and renders a list of log messages.
-    post '/deploy' do
+    post '/app/deploy' do
       if not allow_write_access?(env)
         @error = 'You are not authorized to run deployments'
       elsif locked?
@@ -74,10 +74,10 @@ module Helium
       end
     end
     
-    get('/config') { view_file :config }
+    get('/app/config') { view_file :config }
     
     ## Save changes to the configuration file, making sure it validates as YAML.
-    post '/config' do
+    post '/app/config' do
       @action   = 'config'
       @file     = CONFIG
       @contents = params[:contents]
@@ -96,10 +96,10 @@ module Helium
       erb :edit
     end
     
-    get('/custom') { view_file :custom }
+    get('/app/custom') { view_file :custom }
     
     ## Save changes to the custom loaders file.
-    post '/custom' do
+    post '/app/custom' do
       @action   = 'custom'
       @file     = CUSTOM
       @contents = params[:contents]

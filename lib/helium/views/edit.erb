@@ -4,7 +4,7 @@
   <p class="error"><%=h @error %></p>
 <% end %>
 
-<form action="/<%=h @action %>" method="post">
+<form action="/app/<%=h @action %>" method="post">
   <textarea name="contents" <%= disabled? %>><%=h @contents %></textarea>
   <input type="submit" value="Save" <%= disabled? %>>
 </form>

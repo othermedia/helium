@@ -36,7 +36,7 @@ require('GMap2', 'YAHOO.util.Selector', function() {
 });
 &lt;/script></pre>
 
-<p>To set up Helium, you&rsquo;ll need to <a href="/config">add projects to deploy</a>
+<p>To set up Helium, you&rsquo;ll need to <a href="/app/config">add projects to deploy</a>
 using YAML format. Each entry should be the name of a project followed by its Git URL:</p>
 
 <pre>---
@@ -44,7 +44,7 @@ js.class:     git://github.com/jcoglan/js.class.git
 yui:          git://github.com/othermedia/yui.git
 ojay:         git://github.com/othermedia/ojay.git</pre>
 
-<p>You may also want to <a href="/custom">add some custom loaders</a> for libraries
+<p>You may also want to <a href="/app/custom">add some custom loaders</a> for libraries
 not deployed using Helium. For example the following are loaders for Google Maps:</p>
 
 <pre class="prettyprint">/**
