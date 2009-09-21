@@ -107,21 +107,11 @@ module Helium
         
         log :jake_build, "Building branch '#{ branch }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
         
-        begin
-          Jake.build!(path)
-        rescue
-        end
+        begin; Jake.build!(path)
+        rescue; end
       end
       
-      # Generate JS.Packages dependency file from ERB template and compress the result
-      template = File.read(JS_CONFIG_TEMPLATE)
-      code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
-      packed   = Packr.pack(code, :shrink_vars => true)
-      
-      mkdir_p(static_dir)
-      File.open(static_dir(PACKAGES), 'w') { |f| f.write(code) }
-      File.open(static_dir(PACKAGES_MIN), 'w') { |f| f.write(packed) }
-      
+      generate_manifest!
       manifest + [PACKAGES, PACKAGES_MIN]
     end
     
@@ -151,6 +141,17 @@ module Helium
     end
       
   private
+    
+    # Generates JS.Packages dependency file from ERB template and compresses the result
+    def generate_manifest!
+      template = File.read(JS_CONFIG_TEMPLATE)
+      code     = ERB.new(template, nil, ERB_TRIM_MODE).result(binding)
+      packed   = Packr.pack(code, :shrink_vars => true)
+      
+      mkdir_p(static_dir)
+      File.open(static_dir(PACKAGES), 'w') { |f| f.write(code) }
+      File.open(static_dir(PACKAGES_MIN), 'w') { |f| f.write(packed) }
+    end
     
     # Returns +true+ iff the set of files contains any dependency data.
     def has_manifest?(config)
