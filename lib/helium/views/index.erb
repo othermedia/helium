@@ -11,11 +11,11 @@ generated using data extracted during the build process.</p>
 <p>To use libraries from this server, drop the following in your <code>HEAD</code>:</p>
 
 <pre class="prettyprint">&lt;script type="text/javascript">
-JSCLASS_PATH = 'http://localhost:9292/<%= Helium::WEB_ROOT %>/js.class/2.1.x/build/min';&lt;/script>
+JSCLASS_PATH = 'http://<%= @location %>/js.class/2.1.x/build/min';&lt;/script>
 
-&lt;script src="http://localhost:9292/<%= Helium::WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"
+&lt;script src="http://<%= @location %>/js.class/2.1.x/build/min/loader.js"
         type="text/javascript">&lt;/script>
-&lt;script src="http://localhost:9292/<%= Helium::WEB_ROOT %>/packages.js"
+&lt;script src="http://<%= @location %>/packages.js"
         type="text/javascript">&lt;/script>
 
 &lt;script type="text/javascript">
