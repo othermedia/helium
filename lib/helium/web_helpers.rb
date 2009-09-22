@@ -14,7 +14,8 @@ module Helium
       
       # Returns +true+ iff the request should be allowed write access.
       def allow_write_access?(env)
-        allowed_ips.include?(env['REMOTE_ADDR'])
+        ip = (env['REMOTE_ADDR'] || '').scan(/(?:\d{1,3}\.){3}\d{1,3}/).flatten.first
+        allowed_ips.include?(ip)
       end
       
       # Returns +true+ if a lock exists stopping other deploy processes running.
@@ -37,7 +38,7 @@ module Helium
         @error    = 'You are not authorized to edit this file' unless allow_write_access?(env)
         @projects = project_config
         @action   = name.to_s
-        @file     = Web.const_get(name.to_s.upcase)
+        @file     = Helium::Web.const_get(name.to_s.upcase)
         @contents = File.file?(@file) ? File.read(@file) : ''
         erb :edit
       end

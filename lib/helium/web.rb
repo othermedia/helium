@@ -25,7 +25,7 @@ module Helium
     before do
       @projects = project_config
       @domain   = env['HTTP_HOST']
-      @location = @domain + '/' + WEB_ROOT
+      @location = @domain + '/' + Helium::WEB_ROOT
     end
     
     ## Home page -- just loads the project list and renders.

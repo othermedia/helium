@@ -1,5 +1,5 @@
 #! /usr/bin/env ruby
-
+$VERBOSE = nil
 home = File.join(File.dirname(__FILE__), '..')
 
 require 'fileutils'
@@ -115,7 +115,9 @@ elsif opts = options[:serve]
   app = Rack::File.new(dir)
   
   server = %w[thin mongrel webrick].map { |name|
-    Rack::Handler.get(name) rescue nil
+    begin; Rack::Handler.get(name)
+    rescue LoadError; nil
+    end
   }.compact.first
   
   puts "Serving contents of #{dir} on port 8000..."
