@@ -70,9 +70,16 @@ module Helium
         
         log :export, "Exporting branch '#{ name }' of '#{ project }' into #{ target }"
         rm_rf(target) if File.directory?(target)
-        cd(repo_dir) { `git checkout #{ branch.name }` }
         cp_r(repo_dir, target)
-        rm_rf(join(target, GIT))
+        
+        cd(target) {
+          if repo.branches.map { |b| b.name }.include?(name)
+            `git checkout #{ name }`
+            `git merge #{ branch.name }`
+          else
+            `git checkout -b #{ name } #{ branch.name }`
+          end
+        }
       end
     end
     
