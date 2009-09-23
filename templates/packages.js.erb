@@ -34,7 +34,7 @@ JS.Packages(function() { with(this) {
 <% branches.each_child do |branch, files| -%>
 <% next unless has_manifest?(files) -%>
 
-    current = BRANCHES['<%= project %>']['<%= branch %>'] = {};
+    manifest = (BRANCHES['<%= project %>']['<%= branch %>'] = { c: '<%= files.value %>', f: {} }).f;
 <% files.each do |path, config| -%>
 <% next unless has_manifest?(config) -%>
 
@@ -42,7 +42,7 @@ JS.Packages(function() { with(this) {
      * Manifest for project '<%= project %>', branch '<%= branch %>'
      * File: '<%= path.first %>'
      **/
-    pathname = current['<%= path.first %>'] = {};
+    pathname = manifest['<%= path.first %>'] = {};
     pathname.p = <%= (config[:provides] || []).inspect %>;
     pathname.r = <%= (config[:requires] || []).inspect %>;
     pathname.u = <%= (config[:uses] || []).inspect %>;
@@ -97,13 +97,15 @@ JS.Packages(function() { with(this) {
         log("Using '" + project + "', version: '" + branch + "'");
         BRANCHES[project] = branch;
         
-        var path, config, builder;
+        var commit = pkg.c,
+            files  = pkg.f,
+            path, config, builder;
         
-        for (path in pkg) {
-            if (!pkg.hasOwnProperty(path)) continue;
+        for (path in files) {
+            if (!files.hasOwnProperty(path)) continue;
             
-            config  = pkg[path];
-            builder = file([this.PATH, project, branch].join('/') + path);
+            config  = files[path];
+            builder = file([this.PATH, project, commit].join('/') + path);
             builder.provides.apply(builder, config.p);
             builder.requires.apply(builder, config.r);
             builder.uses.apply(builder, config.u);

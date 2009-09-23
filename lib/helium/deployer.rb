@@ -63,10 +63,10 @@ module Helium
       mkdir_p(static_dir(project))
       
       branches.each do |branch|
-        name = branch.name.split(SEP).last
+        name, commit = branch.name.split(SEP).last, branch.commit.id
         next if HEAD == name
         
-        target = static_dir(project, name)
+        target = static_dir(project, commit)
         
         log :export, "Exporting branch '#{ name }' of '#{ project }' into #{ target }"
         rm_rf(target) if File.directory?(target)
@@ -97,16 +97,18 @@ module Helium
       # Loop over checked-out projects. Skip directories with no Jake file.
       Find.find(static_dir) do |path|
         next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
-        project, branch = *path.split(SEP)[-2..-1]
+        
+        project, commit = *path.split(SEP)[-2..-1]
+        branch = Grit::Repo.new(path).head.name
         Jake.clear_hooks!
         
         # Event listener to capture file information from Jake
         hook = lambda do |build, package, build_type, file|
           if build_type == :min
             file = file.sub(path, '')
-            manifest << join(project, branch, file)
-            key = [project, branch, file]
-            @tree[key] = package.meta
+            manifest << join(project, commit, file)
+            @tree[[project, branch]] = commit
+            @tree[[project, branch, file]] = package.meta
           end
         end
         jake_hook(:file_created, &hook)
@@ -162,9 +164,11 @@ module Helium
     
     # Returns +true+ iff the set of files contains any dependency data.
     def has_manifest?(config)
-      Trie === config ?
-          config.any? { |path, conf| has_manifest?(conf) } :
-          config.has_key?(:provides)
+      case config
+      when Trie then config.any? { |path, conf| has_manifest?(conf) }
+      when Hash then config.has_key?(:provides)
+      else nil
+      end
     end
     
     # Notifies observers by sending a log message.
