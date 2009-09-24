@@ -206,6 +206,11 @@ module Helium
       FileUtils.__send__(*args, &block)
     end
     
+    def `(command)
+      puts command
+      system(command)
+    end
+    
   end
 end
 
