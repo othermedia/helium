@@ -10,7 +10,7 @@ generated using data extracted during the build process.</p>
 
 <p>To use libraries from this server, drop the following in your <code>HEAD</code>:</p>
 
-<pre class="prettyprint">&lt;script src="http://<%= @location %>/packages.js"
+<pre class="prettyprint">&lt;script src="http://<%= @location %>/<%= Helium::PACKAGES_MIN %>"
         type="text/javascript">&lt;/script>
 
 &lt;script type="text/javascript">
