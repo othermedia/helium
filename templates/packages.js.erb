@@ -1,3 +1,14 @@
+<% if @domain -%>
+(function() {
+    var protocol = ("https:" == document.location.protocol) ? "https:" : "http:";
+    window.JSCLASS_PATH = window.JSCLASS_PATH ||
+                          protocol + "//<%= @domain %>/<%= WEB_ROOT %><%= File.dirname(@js_loader.sub(static_dir, '')) %>";
+})();
+<% end -%>
+
+<%= File.read(@js_loader) %>
+
+
 /**
  * JavaScript package manifest, generated <%= Time.now %>
  * Requires JS.Class package manager: http://jsclass.jcoglan.com/packages.html
@@ -6,8 +17,6 @@
  * then use the `require()` function to load objects on demand.
  * 
  *     <!-- Step 1. Load JS.Class and the package listing -->
- *     <script type="text/javascript">JSCLASS_PATH = 'http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/js.class/2.1.x/build/min';</script>
- *     <script type="text/javascript" src="http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/js.class/2.1.x/build/min/loader.js"></script>
  *     <script type="text/javascript" src="http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/packages.js"></script>
  *     
  *     <!-- Step 2. Declare which branches to use -->

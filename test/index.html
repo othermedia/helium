@@ -8,17 +8,15 @@
   <!-- Setup: run deployment service on port 9292, serve this file from localhost:8000. -->
   
   <!-- Step 1. Load the JS.Class loader and the package config -->
-  <script type="text/javascript">JSCLASS_PATH = 'http://localhost:9292/js/js.class/2.1.x/build/min/';</script>
-  <script src="http://localhost:9292/js/js.class/2.1.x/build/min/loader.js" type="text/javascript"></script>
-  <script src="http://localhost:9292/js/packages.js" type="text/javascript"></script>
+  <script src="http://localhost:9292/js/helium.js" type="text/javascript"></script>
   
   <!-- Step 2. Add data required by the package manager -->
   <script type="text/javascript">
     // http://localhost:8000
-    Helium.GOOGLE_KEY = 'ABQIAAAArVbgzt5nxAQAZ_iB_77caBQCULP4XOMyhPd8d_NrQQEO8sT8XBTzVWhRwEDkVfNsvzo8bf4ntGV4ZQ';
+    Helium.GOOGLE_API_KEY = 'ABQIAAAArVbgzt5nxAQAZ_iB_77caBQCULP4XOMyhPd8d_NrQQEO8sT8XBTzVWhRwEDkVfNsvzo8bf4ntGV4ZQ';
     
     // http://10.0.2.2:8000
-    // Helium.GOOGLE_KEY = 'ABQIAAAArVbgzt5nxAQAZ_iB_77caBR-5oywdloojr3wCGctvtY4YLrIFxTp2Uv8Tzdhpc707bQaOPGPEQ3PzA';
+    // Helium.GOOGLE_API_KEY = 'ABQIAAAArVbgzt5nxAQAZ_iB_77caBR-5oywdloojr3wCGctvtY4YLrIFxTp2Uv8Tzdhpc707bQaOPGPEQ3PzA';
     
     Helium.use('yui', '2.7.0');
     Helium.use('ojay', 'master');

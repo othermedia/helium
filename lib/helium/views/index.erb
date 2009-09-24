@@ -10,12 +10,7 @@ generated using data extracted during the build process.</p>
 
 <p>To use libraries from this server, drop the following in your <code>HEAD</code>:</p>
 
-<pre class="prettyprint">&lt;script type="text/javascript">
-JSCLASS_PATH = 'http://<%= @location %>/js.class/2.1.x/build/min';&lt;/script>
-
-&lt;script src="http://<%= @location %>/js.class/2.1.x/build/min/loader.js"
-        type="text/javascript">&lt;/script>
-&lt;script src="http://<%= @location %>/packages.js"
+<pre class="prettyprint">&lt;script src="http://<%= @location %>/packages.js"
         type="text/javascript">&lt;/script>
 
 &lt;script type="text/javascript">
@@ -37,12 +32,16 @@ require('GMap2', 'YAHOO.util.Selector', function() {
 &lt;/script></pre>
 
 <p>To set up Helium, you&rsquo;ll need to <a href="/app/config">add projects to deploy</a>
-using YAML format. Each entry should be the name of a project followed by its Git URL:</p>
+using YAML format. Each entry should be the name of a project followed by its Git URL.
+Helium relies on JS.Class, for which you need to set a Git URL and a version to use:</p>
 
 <pre>---
-js.class:     git://github.com/jcoglan/js.class.git
-yui:          git://github.com/othermedia/yui.git
-ojay:         git://github.com/othermedia/ojay.git</pre>
+js.class:
+  repository:       git://github.com/jcoglan/js.class.git
+  version:          2.1.x
+
+projects:
+  your-library:     git://github.com/your/library.git</pre>
 
 <p>You may also want to <a href="/app/custom">add some custom loaders</a> for libraries
 not deployed using Helium. For example the following are loaders for Google Maps:</p>

@@ -4,7 +4,7 @@ module Helium
     helpers do
       # Returns the data structure contained in the app's deploy.yml file.
       def project_config
-        File.file?(CONFIG) ? (YAML.load(File.read(CONFIG)) || {}) : {}
+        Deployer.new(File.dirname(CONFIG)).projects
       end
       
       # Returns the list of IP addresses that have write access to the app.

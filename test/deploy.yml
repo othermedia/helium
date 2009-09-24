@@ -1,3 +1,8 @@
 ---
-js.class:   git://github.com/jcoglan/js.class.git
-bluff:      git://github.com/jcoglan/bluff.git
+js.class:
+  repository:   git://github.com/jcoglan/js.class.git
+  version:      2.1.x
+
+projects:
+  bluff:        git://github.com/jcoglan/bluff.git
+

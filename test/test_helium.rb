@@ -10,7 +10,7 @@ class TestHelium < Test::Unit::TestCase
   end
   
   def test_build
-    deploy = Helium::Deployer.new(ROOT, 'output')
+    deploy = Helium::Deployer.new(ROOT, 'output', :domain => 'helium.example.com')
     deploy.add_observer(self)
     deploy.run!
   end

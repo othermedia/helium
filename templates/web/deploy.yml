@@ -1,2 +1,8 @@
 ---
-js.class:   git://github.com/jcoglan/js.class.git
+js.class:
+  repository:       git://github.com/jcoglan/js.class.git
+  version:          2.1.x
+
+projects:
+  your-library:     git://github.com/your/library.git
+

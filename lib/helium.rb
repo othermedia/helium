@@ -22,13 +22,15 @@ module Helium
   CONFIG_FILE   = 'deploy.yml'
   REPOS         = 'repos'
   STATIC        = 'static'
-  PACKAGES      = 'packages-src.js'
-  PACKAGES_MIN  = 'packages.js'
+  PACKAGES      = 'helium-src.js'
+  PACKAGES_MIN  = 'helium.js'
   WEB_ROOT      = 'js'
   
   GIT           = '.git'
   HEAD          = 'HEAD'
   
+  JS_CLASS      = 'js.class'
+  LOADER_FILE   = 'loader.js'
   JAKE_FILE     = Jake::CONFIG_FILE
   
   SEP  = File::SEPARATOR

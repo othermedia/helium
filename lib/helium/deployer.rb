@@ -14,19 +14,32 @@ module Helium
     # 
     #   deployer = Helium::Deployer.new('path/to/app', 'js')
     # 
-    def initialize(path, output_dir = 'output')
+    def initialize(path, output_dir = 'output', options = {})
       @path       = File.expand_path(path)
       @config     = join(@path, CONFIG_FILE)
       raise "Expected config file at #{@config}" unless File.file?(@config)
-      @config     = YAML.load(File.read(@config))
       @output_dir = join(@path, output_dir)
+      @options    = options
+    end
+    
+    # Returns a hash of projects names and their Git URLs.
+    def projects
+      return @projects if defined?(@projects)
+      
+      data = YAML.load(File.read(@config))
+      raise "No configuration for JS.Class" unless js_class = data[JS_CLASS]
+      @jsclass_version = js_class['version']
+      
+      @projects = data['projects'] || {}
+      @projects[JS_CLASS] = js_class['repository']
+      @projects
     end
     
     # Runs all the deploy actions. If given a project name, only checkout out and builds
     # the given project, otherwise build all projects in `deploy.yml`.
     def run!(project = nil)
       return deploy!(project) if project
-      @config.each { |project, url| deploy!(project, false) }
+      projects.each { |project, url| deploy!(project, false) }
       run_builds!
     end
     
@@ -47,7 +60,7 @@ module Helium
         log :git_fetch, "Updating Git repo in #{ dir }"
         cd(dir) { `git fetch origin` }
       else
-        url = @config[project]
+        url = projects[project]
         log :git_clone, "Cloning Git repo #{ url } into #{ dir }"
         `git clone #{ url } "#{ dir }"`
       end
@@ -88,7 +101,9 @@ module Helium
     # dependencies and generated file paths, and when all builds are finished we generate
     # a JS.Packages file listing all the files discovered. This file should be included
     # in web pages to set up the the packages manager for loading our projects.
-    def run_builds!(options = {})
+    def run_builds!(options = nil)
+      options ||= @options
+      
       @tree    = Trie.new
       @custom  = options[:custom]
       @domain  = options[:domain]
@@ -105,6 +120,10 @@ module Helium
         # Event listener to capture file information from Jake
         hook = lambda do |build, package, build_type, file|
           if build_type == :min
+            @js_loader = file if File.basename(file) == LOADER_FILE and
+                                 project == JS_CLASS and
+                                 branch  == @jsclass_version
+            
             file = file.sub(path, '')
             manifest << join(project, commit, file)
             @tree[[project, branch]] = commit
@@ -132,7 +151,7 @@ module Helium
         (Dir.entries(dir) - %w[. ..]).each do |entry|
           path = join(dir, entry)
           next unless File.directory?(path)
-          rm_rf(path) unless @config.has_key?(entry)
+          rm_rf(path) unless projects.has_key?(entry)
         end
       end
     end
