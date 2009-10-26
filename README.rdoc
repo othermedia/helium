@@ -7,6 +7,9 @@ system and CDN server. It comes with a web frontend that allows Git-hosted proje
 to be downloaded, built and served from a single domain, allowing any number of other
 sites to use the projects and receive automatic updates when new versions are deployed.
 
+Helium is free software, released under the GPL licence. Please see the
+<tt>LICENCE</tt> file for details.
+
 
 == Overview
 
