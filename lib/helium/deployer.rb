@@ -35,8 +35,8 @@ module Helium
       @projects
     end
     
-    # Runs all the deploy actions. If given a project name, only checkout out and builds
-    # the given project, otherwise build all projects in `deploy.yml`.
+    # Runs all the deploy actions. If given a project name, only checks out and builds
+    # the given project, otherwise builds all projects in `deploy.yml`.
     def run!(project = nil)
       return deploy!(project) if project
       projects.each { |project, url| deploy!(project, false) }
