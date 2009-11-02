@@ -9,7 +9,7 @@ module Helium
       
       # Returns the list of IP addresses that have write access to the app.
       def allowed_ips
-        Web.config.allow_ips
+        Helium::Web.config.allow_ips
       end
       
       # Returns +true+ iff the request should be allowed write access.
