@@ -1,6 +1,5 @@
-=== 0.1.0 / 2009-06-08
+=== 0.1.0 / 2009-11-02
 
-* 1 major enhancement
-
-  * Birthday!
+* First public release under the GPL v2
+* Includes Deployer, a web UI, and `install`, `create` and `serve` command line tools
 
