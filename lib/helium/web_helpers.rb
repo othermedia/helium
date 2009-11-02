@@ -9,11 +9,12 @@ module Helium
       
       # Returns the list of IP addresses that have write access to the app.
       def allowed_ips
-        File.file?(ACCESS) ? (YAML.load(File.read(ACCESS)) || []) : []
+        Web.config.allow_ips
       end
       
       # Returns +true+ iff the request should be allowed write access.
       def allow_write_access?(env)
+        return true unless allowed_ips.is_a?(Array)
         ip = (env['REMOTE_ADDR'] || '').scan(/(?:\d{1,3}\.){3}\d{1,3}/).flatten.first
         allowed_ips.include?(ip)
       end

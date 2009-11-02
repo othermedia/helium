@@ -4,6 +4,7 @@ README.txt
 Rakefile
 bin/he
 lib/helium.rb
+lib/helium/configurable.rb
 lib/helium/deployer.rb
 lib/helium/generator.rb
 lib/helium/jake.rb
@@ -22,7 +23,6 @@ templates/project/jake.yml.erb
 templates/project/Jakefile
 templates/project/source/__name__.js.erb
 templates/project/test/index.html.erb
-templates/web/access.yml
 templates/web/config.ru
 templates/web/deploy.yml
 templates/web/custom.js

@@ -38,7 +38,7 @@ module Helium
   
   ERB_TRIM_MODE = '-'
   
-  %w[trie deployer generator logger].each do |file|
+  %w[trie configurable deployer generator logger].each do |file|
     require File.join(ROOT, 'helium', file)
   end
   

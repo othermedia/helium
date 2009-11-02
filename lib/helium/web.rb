@@ -6,15 +6,17 @@ require 'yaml'
 module Helium
   class Web < Sinatra::Base
     
+    
     ROOT_DIR = File.dirname(__FILE__)
     require File.join(ROOT_DIR, '..', 'helium')
     require File.join(ROOT_DIR, 'web_helpers')
+    
+    extend Configurable
     
     LIB_DIR  = 'lib'
     
     CONFIG   = File.join(APP_DIR, 'deploy.yml')
     CUSTOM   = File.join(APP_DIR, 'custom.js')
-    ACCESS   = File.join(APP_DIR, 'access.yml')
     PUBLIC   = File.join(APP_DIR, 'public', WEB_ROOT)
     LOCK     = File.join(APP_DIR, '.lock')
     
