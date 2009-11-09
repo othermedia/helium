@@ -7,6 +7,14 @@ module Helium
         Helium::Deployer.new(File.dirname(CONFIG)).projects
       end
       
+      # Returns the domain and path from which script files are served.
+      def get_location
+        location = Helium::Deployer.new(File.dirname(CONFIG)).config['location'] ||
+                   env['HTTP_HOST'] + '/' + Helium::WEB_ROOT
+        
+        location.gsub(/\/*$/, '')
+      end
+      
       # Returns the list of IP addresses that have write access to the app.
       def allowed_ips
         Helium::Web.config.allow_ips

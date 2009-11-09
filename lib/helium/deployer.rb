@@ -22,15 +22,19 @@ module Helium
       @options    = options
     end
     
+    # Returns the deserialized contents of `deploy.yml`.
+    def config
+      @config_data ||= YAML.load(File.read(@config))
+    end
+    
     # Returns a hash of projects names and their Git URLs.
     def projects
       return @projects if defined?(@projects)
       
-      data = YAML.load(File.read(@config))
-      raise "No configuration for JS.Class" unless js_class = data[JS_CLASS]
+      raise "No configuration for JS.Class" unless js_class = config[JS_CLASS]
       @jsclass_version = js_class['version']
       
-      @projects = data['projects'] || {}
+      @projects = config['projects'] || {}
       @projects[JS_CLASS] = js_class['repository']
       @projects
     end
@@ -104,9 +108,9 @@ module Helium
     def run_builds!(options = nil)
       options ||= @options
       
-      @tree    = Trie.new
-      @custom  = options[:custom]
-      @domain  = options[:domain]
+      @tree     = Trie.new
+      @custom   = options[:custom]
+      @location = options[:location]
       manifest = []
       
       # Loop over checked-out projects. Skip directories with no Jake file.

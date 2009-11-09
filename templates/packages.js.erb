@@ -1,10 +1,8 @@
-<% if @domain -%>
 (function() {
     var protocol = ("https:" == document.location.protocol) ? "https:" : "http:";
     window.JSCLASS_PATH = window.JSCLASS_PATH ||
-                          protocol + "//<%= @domain %>/<%= WEB_ROOT %><%= File.dirname(@js_loader.sub(static_dir, '')) %>";
+                          protocol + "//<%= @location %><%= File.dirname(@js_loader.sub(static_dir, '')) %>";
 })();
-<% end -%>
 
 <%= File.read(@js_loader) %>
 
@@ -17,7 +15,7 @@
  * then use the `require()` function to load objects on demand.
  * 
  *     <!-- Step 1. Load JS.Class and the package listing -->
- *     <script type="text/javascript" src="http://<%= @domain || 'js.example.com' %>/<%= WEB_ROOT %>/<%= PACKAGES_MIN %>"></script>
+ *     <script type="text/javascript" src="http://<%= @location %>/<%= PACKAGES_MIN %>"></script>
  *     
  *     <!-- Step 2. Declare which branches to use -->
  *     <script type="text/javascript">
@@ -73,10 +71,8 @@ JS.Packages(function() { with(this) {
     
     window.Helium = window.Helium || {};
     
-<% if @domain -%>
     var protocol = ("https:" == document.location.protocol) ? "https:" : "http:";
-    Helium.PATH = protocol + "//<%= @domain %>/<%= WEB_ROOT %>";
-<% end -%>
+    Helium.PATH = protocol + "//<%= @location %>";
     
     /**
      * Helium.use(project, branch) -> undefined

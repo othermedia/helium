@@ -26,8 +26,7 @@ module Helium
     
     before do
       @projects = project_config
-      @domain   = env['HTTP_HOST']
-      @location = @domain + '/' + Helium::WEB_ROOT
+      @location = get_location
     end
     
     ## Home page -- just loads the project list and renders.
@@ -62,7 +61,7 @@ module Helium
         deployer.cleanup!
         
         custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
-        files = deployer.run_builds!(:custom => custom, :domain => @domain)
+        files = deployer.run_builds!(:custom => custom, :location => @location)
         
         FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
         
