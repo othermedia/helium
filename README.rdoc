@@ -71,8 +71,6 @@ using the <tt>he install</tt> command with the name of the directory to create:
 This will give you the following files:
 
   helium-app/
-      public/
-          style.css etc.
       config.ru
       custom.js
       deploy.yml

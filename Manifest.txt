@@ -13,6 +13,9 @@ lib/helium/logger.rb
 lib/helium/trie.rb
 lib/helium/web.rb
 lib/helium/web_helpers.rb
+lib/helium/public/prettify.css
+lib/helium/public/prettify.js
+lib/helium/public/style.css
 lib/helium/views/deploy.erb
 lib/helium/views/edit.erb
 lib/helium/views/index.erb
@@ -27,9 +30,6 @@ templates/project/test/index.html.erb
 templates/web/config.ru
 templates/web/deploy.yml
 templates/web/custom.js
-templates/web/public/prettify.css
-templates/web/public/prettify.js
-templates/web/public/style.css
 test/test_helium.rb
 test/deploy.yml
 test/index.html

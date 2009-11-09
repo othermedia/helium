@@ -12,7 +12,7 @@ require 'oyster'
 
 module Helium
   
-  VERSION = '0.1.0'
+  VERSION = '0.1.1'
   
   ROOT          = File.expand_path(File.dirname(__FILE__))
   TEMPLATES     = File.join(ROOT, '..', 'templates')

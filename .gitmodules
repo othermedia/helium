@@ -1,0 +1,3 @@
+[submodule "vendor/rack-gem-assets"]
+	path = vendor/rack-gem-assets
+	url = git://github.com/simonmenke/rack-gem-assets.git

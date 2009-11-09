@@ -7,7 +7,7 @@ module Helium
   class Web < Sinatra::Base
     
     
-    ROOT_DIR = File.dirname(__FILE__)
+    ROOT_DIR = File.expand_path(File.dirname(__FILE__))
     require File.join(ROOT_DIR, '..', 'helium')
     require File.join(ROOT_DIR, 'web_helpers')
     
@@ -112,6 +112,11 @@ module Helium
         @error = 'You are not authorized to edit this file'
       end
       erb :edit
+    end
+    
+    ## Catch requests for public files and serve them from the gem
+    get '/*' do
+      send_file(File.join(ROOT_DIR, 'public', env['PATH_INFO']))
     end
     
   end
