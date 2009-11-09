@@ -1,3 +1,9 @@
+=== 0.1.1 / 2009-11-09
+
+* Don't place style.css etc in the local app directory, serve them from the gem
+* Allow a `location` field in `deploy.yml` that changes the paths rendered in `helium.js`
+
+
 === 0.1.0 / 2009-11-02
 
 * First public release under the GPL v2
