@@ -13,6 +13,7 @@ loader(function(cb) {
     try {
         window.pageTracker = _gat._getTracker(Helium.GOOGLE_ANALYTICS_ID);
     } catch (err) {}
+    cb();
 })  .provides('pageTracker')
     .requires('_gat');
 
