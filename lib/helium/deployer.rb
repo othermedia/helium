@@ -71,7 +71,7 @@ module Helium
     end
     
     # Exports static copies of a project from every branch and tag in its Git repository.
-    # Existing static copies on disk are destroyed and replaced.
+    # Existing static copies on disk that point to old branch heads are removed.
     def export(project)
       repo_dir = repo_dir(project)
       repo     = Grit::Repo.new(repo_dir)
@@ -83,10 +83,21 @@ module Helium
         name, commit = branch.name.split(SEP).last, branch.commit.id
         next if HEAD == name
         
+        # If the commit is already exported, leave it alone
         target = static_dir(project, commit)
+        next if File.directory?(target)
+        
+        # Otherwise if there's an export matching the branch, the branch
+        # must have been updated so we remove the stale copy
+        if old_head = (Dir.entries(static_dir(project)) - %w[. ..]).find do |copy|
+            export_repo = Grit::Repo.new(static_dir(project, copy))
+            export_repo.head.name == name
+          end
+          log :cleanup, "Removing old head of '#{ name }' at '#{ old_head }'"
+          rm_rf(static_dir(project, old_head))
+        end
         
         log :export, "Exporting branch '#{ name }' of '#{ project }' into #{ target }"
-        rm_rf(target) if File.directory?(target)
         cp_r(repo_dir, target)
         
         cd(target) {
