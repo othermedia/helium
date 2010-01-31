@@ -26,8 +26,10 @@ module Helium
   PACKAGES_MIN  = 'helium.js'
   WEB_ROOT      = 'js'
   
+  COMMIT        = /^[0-9a-f]{40}$/
   GIT           = '.git'
   HEAD          = 'HEAD'
+  HEAD_LIST     = 'heads.yml'
   
   JS_CLASS      = 'js.class'
   LOADER_FILE   = 'loader.js'

@@ -71,43 +71,25 @@ module Helium
     end
     
     # Exports static copies of a project from every branch and tag in its Git repository.
-    # Existing static copies on disk that point to old branch heads are removed.
+    # Existing static copies on disk are removed. Mappings from branch/tag names to commit
+    # IDs are stored in heads.yml in the project directory.
     def export(project)
       repo_dir = repo_dir(project)
       repo     = Grit::Repo.new(repo_dir)
-      branches = repo.remotes + repo.tags
       
-      mkdir_p(static_dir(project))
+      export_directory = static_dir(project)
+      rm_rf(export_directory) if File.directory?(export_directory)
+      mkdir_p(export_directory)
       
-      branches.each do |branch|
-        name, commit = branch.name.split(SEP).last, branch.commit.id
-        next if HEAD == name
-        
-        # If the commit is already exported, leave it alone
+      heads = head_mappings(project)
+      File.open(static_dir(project, HEAD_LIST), 'w') { |f| f.write(YAML.dump(heads)) }
+      
+      heads.values.uniq.each do |commit|
         target = static_dir(project, commit)
-        next if File.directory?(target)
-        
-        # Otherwise if there's an export matching the branch, the branch
-        # must have been updated so we remove the stale copy
-        if old_head = (Dir.entries(static_dir(project)) - %w[. ..]).find do |copy|
-            export_repo = Grit::Repo.new(static_dir(project, copy))
-            export_repo.head.name == name
-          end
-          log :cleanup, "Removing old head of '#{ name }' at '#{ old_head }'"
-          rm_rf(static_dir(project, old_head))
-        end
-        
-        log :export, "Exporting branch '#{ name }' of '#{ project }' into #{ target }"
+        log :export, "Exporting commit '#{ commit }' of '#{ project }' into #{ target }"
         cp_r(repo_dir, target)
         
-        cd(target) {
-          if repo.branches.map { |b| b.name }.include?(name)
-            `git checkout #{ name }`
-            `git merge #{ branch.name }`
-          else
-            `git checkout -b #{ name } #{ branch.name }`
-          end
-        }
+        cd(target) { `git checkout #{commit}` }
       end
     end
     
@@ -122,14 +104,16 @@ module Helium
       @tree     = Trie.new
       @custom   = options[:custom]
       @location = options[:location]
-      manifest = []
+      manifest  = []
       
       # Loop over checked-out projects. Skip directories with no Jake file.
       Find.find(static_dir) do |path|
         next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
         
         project, commit = *path.split(SEP)[-2..-1]
-        branch = Grit::Repo.new(path).head.name
+        heads = YAML.load(File.read(join(path, '..', HEAD_LIST)))
+        branches = heads.select { |(head, id)| id == commit }.map { |pair| pair.first }
+        
         Jake.clear_hooks!
         
         # Event listener to capture file information from Jake
@@ -137,18 +121,21 @@ module Helium
           if build_type == :min
             @js_loader = file if File.basename(file) == LOADER_FILE and
                                  project == JS_CLASS and
-                                 branch  == @jsclass_version
+                                 branches.include?(@jsclass_version)
             
             file = file.sub(path, '')
             manifest << join(project, commit, file)
-            @tree[[project, branch]] = commit
-            @tree[[project, branch, file]] = package.meta
+            
+            branches.each do |branch|
+              @tree[[project, branch]] = commit
+              @tree[[project, branch, file]] = package.meta
+            end
           end
         end
         jake_hook(:file_created, &hook)
         jake_hook(:file_not_changed, &hook)
         
-        log :jake_build, "Building branch '#{ branch }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
+        log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
         
         begin; Jake.build!(path)
         rescue; end
@@ -202,6 +189,16 @@ module Helium
       when Trie then config.any? { |path, conf| has_manifest?(conf) }
       when Hash then config.has_key?(:provides)
       else nil
+      end
+    end
+    
+    # Returns a hash of branch/tag names to commit IDs for a project
+    def head_mappings(project)
+      repo = Grit::Repo.new(repo_dir(project))
+      (repo.remotes + repo.tags).inject({}) do |list, head|
+        commit = head.commit.id
+        list[head.name.split('/').last] = commit if commit =~ COMMIT
+        list
       end
     end
     
