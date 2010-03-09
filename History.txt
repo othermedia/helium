@@ -1,3 +1,10 @@
+=== 0.1.2 / 2010-03-09
+
+* Fix bug in custom loader function for `pageTracker`
+* Improve how we map branch/tag names to commits to cope correctly with multiple refs
+  pointing at the same commit and always picking the latest commit for a branch
+
+
 === 0.1.1 / 2009-11-09
 
 * Don't place style.css etc in the local app directory, serve them from the gem
