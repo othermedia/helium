@@ -78,7 +78,6 @@ module Helium
       repo     = Grit::Repo.new(repo_dir)
       
       export_directory = static_dir(project)
-      rm_rf(export_directory) if File.directory?(export_directory)
       mkdir_p(export_directory)
       
       heads = head_mappings(project)
@@ -86,6 +85,8 @@ module Helium
       
       heads.values.uniq.each do |commit|
         target = static_dir(project, commit)
+        next if File.directory?(target)
+        
         log :export, "Exporting commit '#{ commit }' of '#{ project }' into #{ target }"
         cp_r(repo_dir, target)
         
