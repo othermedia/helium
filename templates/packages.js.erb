@@ -6,6 +6,8 @@
 
 <%= File.read(@js_loader) %>
 
+this.require = this.require || JS.require;
+
 
 /**
  * JavaScript package manifest, generated <%= Time.now %>
