@@ -4,9 +4,7 @@
 and lets you load objects from these libraries on demand. It uses
 <a href="http://github.com/jcoglan/jake">Jake</a> to build each library and extract
 dependency data, and <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>
-to resolve dependencies and load files at runtime. The
-<a href="/<%= Helium::WEB_ROOT %>/<%= Helium::PACKAGES %>">package manifest</a> is
-generated using data extracted during the build process.</p>
+to resolve dependencies and load files at runtime.</p>
 
 <p>To use libraries from this server, drop the following in your <code>HEAD</code>:</p>
 
@@ -19,11 +17,11 @@ generated using data extracted during the build process.</p>
 // Helium.use('ojay', '0.4.1');
 &lt;/script></pre>
 
-<p>Use the <code>require()</code> function throughout your pages to load JavaScript
-objects on demand. Dependencies are automatically handled for you:</p>
+<p>Use the <code>JS.require()</code> function throughout your pages to load
+JavaScript objects on demand. Dependencies are automatically handled for you:</p>
 
 <pre class="prettyprint">&lt;script type="text/javascript">
-require('GMap2', 'YAHOO.util.Selector', function() {
+JS.require('GMap2', 'YAHOO.util.Selector', function() {
     
     var box   = document.getElementById('mapview'),
         map   = new GMap2(box),
