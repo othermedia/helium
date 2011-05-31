@@ -1,6 +1,6 @@
 doc
 pkg
-README.txt
 web/lib
 web/public/js
 test/output
+*.gem
