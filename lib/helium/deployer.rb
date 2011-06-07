@@ -113,7 +113,7 @@ module Helium
         
         project, commit = *path.split(SEP)[-2..-1]
         heads = YAML.load(File.read(join(path, '..', HEAD_LIST)))
-        branches = heads.select { |(head, id)| id == commit }.map { |pair| pair.first }
+        branches = heads.select { |head, id| id == commit }.map { |pair| pair.first }
         
         Jake.clear_hooks!
         
