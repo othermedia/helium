@@ -107,39 +107,53 @@ module Helium
       @location = options[:location]
       manifest  = []
       
-      # Loop over checked-out projects. Skip directories with no Jake file.
-      Find.find(static_dir) do |path|
-        next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
+      # Loop over checked-out projects.
+      Dir.open(static_dir).reject {|p| p[0] == '.' }.each do |proj_path|
+        proj_path = join(static_dir, proj_path)
         
-        project, commit = *path.split(SEP)[-2..-1]
-        heads = YAML.load(File.read(join(path, '..', HEAD_LIST)))
-        branches = heads.select { |head, id| id == commit }.map { |pair| pair.first }
+        next unless File.directory?(proj_path)
         
-        Jake.clear_hooks!
-        
-        # Event listener to capture file information from Jake
-        hook = lambda do |build, package, build_type, file|
-          if build_type == :min
-            @js_loader = file if File.basename(file) == LOADER_FILE and
-                                 project == JS_CLASS and
-                                 branches.include?(@jsclass_version)
-            
-            file = file.sub(path, '')
-            manifest << join(project, commit, file)
-            
-            branches.each do |branch|
-              @tree[[project, branch]] = commit
-              @tree[[project, branch, file]] = package.meta
+        Dir.open(proj_path).each do |path|
+          path = join(proj_path, path)
+          
+          # Skip directories with no Jake file.
+          next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
+          
+          project, commit = *path.split(SEP)[-2..-1]
+          
+          heads = YAML.load(File.read(join(path, '..', HEAD_LIST)))
+          branches = heads.select { |head, id| id == commit }.map { |pair| pair.first }
+          
+          Jake.clear_hooks!
+          
+          # Event listener to capture file information from Jake
+          hook = lambda do |build, package, build_type, file|
+            if build_type == :min
+              if File.basename(file) == LOADER_FILE and project == JS_CLASS
+                # puts commit.inspect
+              end
+              
+              @js_loader = file if File.basename(file) == LOADER_FILE and
+                                   project == JS_CLASS and
+                                   branches.include?(@jsclass_version)
+              
+              file = file.sub(path, '')
+              manifest << join(project, commit, file)
+              
+              branches.each do |branch|
+                @tree[[project, branch]] = commit
+                @tree[[project, branch, file]] = package.meta
+              end
             end
           end
+          jake_hook(:file_created, &hook)
+          jake_hook(:file_not_changed, &hook)
+          
+          log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
+          
+          begin; Jake.build!(path)
+          rescue; end
         end
-        jake_hook(:file_created, &hook)
-        jake_hook(:file_not_changed, &hook)
-        
-        log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
-        
-        begin; Jake.build!(path)
-        rescue; end
       end
       
       generate_manifest!
