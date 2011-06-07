@@ -46,18 +46,20 @@ installed on your webserver. Helium's web frontend assumes you will be using Rac
 serve the application. You will also need these gems, though RubyGems should install
 these for you:
 
-  sudo gem install hoe grit jake packr oyster sinatra rack
+  gem install grit jake packr oyster sinatra rack
+
+Prefix this and any other `gem install` commands with `sudo` if you have your system set
+up in such a way that it's necessary.
 
 
 == Installation
 
 To install from Rubyforge:
 
-  sudo gem install hoe helium
+  gem install helium
 
 To install from GitHub:
 
-  sudo gem install hoe
   git clone git://github.com/othermedia/helium.git
   cd helium
   ln -s README.rdoc README.txt
