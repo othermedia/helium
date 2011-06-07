@@ -4,7 +4,6 @@ require 'yaml'
 require 'fileutils'
 require 'find'
 
-require 'rubygems'
 require 'grit'
 require 'jake'
 require 'packr'
@@ -49,4 +48,3 @@ module Helium
   end
   
 end
-

@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'rubygems'
 require 'sinatra/base'
 require 'yaml'
 

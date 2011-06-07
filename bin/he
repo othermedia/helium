@@ -3,7 +3,6 @@ $VERBOSE = nil
 home = File.join(File.dirname(__FILE__), '..')
 
 require 'fileutils'
-require 'rubygems'
 require 'oyster'
 require 'jake'
 require 'rack'

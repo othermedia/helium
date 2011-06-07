@@ -1,6 +1,5 @@
 ::APP_DIR = ::File.expand_path(::File.dirname(__FILE__))
 
-require 'rubygems'
 require 'helium/web'
 
 Helium::Web.configure do |config|
@@ -8,4 +7,3 @@ Helium::Web.configure do |config|
 end
 
 run Helium::Web
-
