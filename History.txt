@@ -1,3 +1,9 @@
+=== 0.1.3 / 2011-06-07
+
+* Update website copy
+* Remove dependency on Hoe
+
+
 === 0.1.2 / 2010-03-09
 
 * Fix bug in custom loader function for `pageTracker`
@@ -15,4 +21,3 @@
 
 * First public release under the GPL v2
 * Includes Deployer, a web UI, and `install`, `create` and `serve` command line tools
-
