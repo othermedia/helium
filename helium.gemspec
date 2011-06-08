@@ -27,7 +27,10 @@ Gem::Specification.new do |s|
   s.add_dependency('sinatra', '>= 0.9.4')
   s.add_dependency('rack', '>= 1.0')
   
-  s.files       = Dir.glob("lib/**/*.rb") +
+  s.executables = ['he']
+  
+  s.files       = Dir.glob("bin/*") +
+                  Dir.glob("lib/**/*.rb") +
                   Dir.glob("lib/helium/public/*.{css,js}") +
                   Dir.glob("lib/helium/views/*.erb") +
                   Dir.glob("templates/**/*") +
