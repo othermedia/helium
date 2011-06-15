@@ -75,7 +75,13 @@ module Helium
     # IDs are stored in heads.yml in the project directory.
     def export(project)
       repo_dir = repo_dir(project)
-      repo     = Grit::Repo.new(repo_dir)
+      
+      begin
+        repo = Grit::Repo.new(repo_dir)
+      rescue Grit::NoSuchPathError
+        log :error, "The project '#{project}' is not specified in your deploy.yml file"
+        return
+      end
       
       export_directory = static_dir(project)
       mkdir_p(export_directory)
