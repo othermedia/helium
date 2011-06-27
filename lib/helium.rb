@@ -11,8 +11,6 @@ require 'oyster'
 
 module Helium
   
-  VERSION = '0.1.3'
-  
   ROOT          = File.expand_path(File.dirname(__FILE__))
   TEMPLATES     = File.join(ROOT, '..', 'templates')
   ERB_EXT       = '.erb'
