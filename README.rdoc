@@ -47,18 +47,17 @@ documentation for more info.
 
 Before deploying this app, you will need Ruby, RubyGems, Passenger (mod_rack),
 and Git installed on your webserver. Helium's web frontend assumes you will be
-using Rack to serve the application. You will also need these gems, though
-RubyGems should install these for you:
+using Rack to serve the application.
 
-  gem install grit jake packr oyster sinatra rack
+If you've checked Helium out from Git, use Bundler to install its dependencies:
 
-Prefix this and any other `gem install` commands with `sudo` if you have your
-system set up in such a way that it's necessary.
+  gem install bundler
+  bundle install
 
 
 == Installation
 
-To install from Rubyforge:
+To install from Rubygems:
 
   gem install helium
 
@@ -66,8 +65,8 @@ To install from GitHub:
 
   git clone git://github.com/othermedia/helium.git
   cd helium
-  ln -s README.rdoc README.txt
-  rake install_gem
+  gem build helium.gemspec
+  gem install helium-0.2.0.gem
 
 With the gem installed, you can install a copy of the web app anywhere on your
 system using the <tt>he install</tt> command with the name of the directory to
