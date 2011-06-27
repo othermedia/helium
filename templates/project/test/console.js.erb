@@ -1,0 +1,31 @@
+// This file lets you run your tests from the command line using any platform
+// supported by JS.Class. To run it you will need a local copy of JS.Class --
+// set the path to it in JSCLASS_PATH below.
+
+(function() {
+  var $ = (typeof global === 'object') ? global : this
+  $.JSCLASS_PATH = 'path/to/jsclass/'
+})()
+
+if (this.ActiveXObject)
+  load = function(path) {
+    var fso = new ActiveXObject('Scripting.FileSystemObject'), file, runner
+    try {
+      file   = fso.OpenTextFile(path)
+      runner = function() { eval(file.ReadAll()) }
+      runner()
+    } finally {
+      try { if (file) file.Close() } catch (e) {}
+    }
+  }
+
+if (typeof require === 'function') {
+  require('../' + JSCLASS_PATH + 'loader')
+  require('./packages')
+  require('./runner')
+} else {
+  load(JSCLASS_PATH + 'loader.js')
+  load('test/packages.js')
+  load('test/runner.js')
+}
+

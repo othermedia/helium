@@ -1,0 +1,10 @@
+JS.Packages(function() { with(this) {
+    autoload(/^(.*)Spec$/, {from: CWD + '/test/specs', require: '$1'})
+}})
+
+JS.require('JS.Test', function(Test) {
+    JS.require( '<%= camelize(@name) %>Spec',
+                
+                Test.method('autorun'))
+})
+

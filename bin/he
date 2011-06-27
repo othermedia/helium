@@ -107,7 +107,7 @@ elsif opts = options[:create]
   puts "  * Build your project by running `jake` in the root directory"
   puts "  * We've added generated files to your .gitignore"
   puts "  * Keep your dependencies up-to-date in jake.yml"
-  puts "  * Point test/index.html at your Helium server and write some tests!\n\n"
+  puts "  * Point test/browser.html at your Helium server and write some tests!\n\n"
 
 elsif opts = options[:serve]
   dir = File.expand_path(opts[:unclaimed].first || '.')

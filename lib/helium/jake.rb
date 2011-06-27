@@ -23,9 +23,11 @@ module Helium
 // Maintain your project's dependencies in jake.yml; they will be
 // reflected here when you run a build.
 
+JS.ENV.CWD = (typeof CWD === 'undefined') ? '.' : CWD
+
 JS.Packages(function() { with(this) {
 <% files.each do |path, meta| %>
-    file('./<%= LIB %><%= path %>')
+    file(CWD + '/test/<%= LIB %><%= path %>')
         .provides(<%= list(meta[:provides]) %>)
         .requires(<%= list(meta[:requires]) %>)
         .uses(<%= list(meta[:uses]) %>);
