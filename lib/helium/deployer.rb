@@ -1,16 +1,17 @@
 module Helium
-  # The +Deployer+ class is responsible for performing all of Helium's central functions:
-  # downloading projects from Git, exporting static copies of branches, building projects
-  # using Jake and generating the dependency file.
+  # The +Deployer+ class is responsible for performing all of Helium's central
+  # functions: downloading projects from Git, exporting static copies of
+  # branches, building projects using Jake and generating the dependency file.
   # 
-  # To run, the class requires a file called `deploy.yml` in the target directory, listing
-  # projects with their Git URLs. (See tests and README for examples.)
+  # To run, the class requires a file called `deploy.yml` in the target
+  # directory, listing projects with their Git URLs. (See tests and README for
+  # examples.)
   # 
   class Deployer
     include Observable
     
-    # Initialize using the directory containing the `deploy.yml` file, and the name of
-    # the directory to export repositories and static files to.
+    # Initialize using the directory containing the `deploy.yml` file, and the
+    # name of the directory to export repositories and static files to.
     # 
     #   deployer = Helium::Deployer.new('path/to/app', 'js')
     # 
@@ -39,25 +40,25 @@ module Helium
       @projects
     end
     
-    # Runs all the deploy actions. If given a project name, only checks out and builds
-    # the given project, otherwise builds all projects in `deploy.yml`.
+    # Runs all the deploy actions. If given a project name, only checks out and
+    # builds the given project, otherwise builds all projects in `deploy.yml`.
     def run!(project = nil)
       return deploy!(project) if project
       projects.each { |project, url| deploy!(project, false) }
       run_builds!
     end
     
-    # Deploys an individual project by checking it out from Git, exporting static copies
-    # of all its branches and building them using Jake.
+    # Deploys an individual project by checking it out from Git, exporting
+    # static copies of all its branches and building them using Jake.
     def deploy!(project, build = true)
       checkout(project)
       export(project)
       run_builds! if build
     end
     
-    # Checks out (or updates if already checked out) a project by name from its Git
-    # repository. If the project is new, we use `git clone` to copy it, otherwise
-    # we use `git fetch` to update it.
+    # Checks out (or updates if already checked out) a project by name from its
+    # Git repository. If the project is new, we use `git clone` to copy it,
+    # otherwise we use `git fetch` to update it.
     def checkout(project)
       dir = repo_dir(project)
       if File.directory?(join(dir, GIT))
@@ -70,9 +71,10 @@ module Helium
       end
     end
     
-    # Exports static copies of a project from every branch and tag in its Git repository.
-    # Existing static copies on disk are removed. Mappings from branch/tag names to commit
-    # IDs are stored in heads.yml in the project directory.
+    # Exports static copies of a project from every branch and tag in its Git
+    # repository. Existing static copies on disk are removed. Mappings from
+    # branch/tag names to commit IDs are stored in heads.yml in the project
+    # directory.
     def export(project)
       repo_dir = repo_dir(project)
       
@@ -103,11 +105,12 @@ module Helium
       end
     end
     
-    # Scans all the checked-out projects for Jake build files and builds those projects
-    # that have such a file. As the build progresses we use Jake event hooks to collect
-    # dependencies and generated file paths, and when all builds are finished we generate
-    # a JS.Packages file listing all the files discovered. This file should be included
-    # in web pages to set up the the packages manager for loading our projects.
+    # Scans all the checked-out projects for Jake build files and builds those
+    # projects that have such a file. As the build progresses we use Jake event
+    # hooks to collect dependencies and generated file paths, and when all
+    # builds are finished we generate a JS.Packages file listing all the files
+    # discovered. This file should be included in web pages to set up the the
+    # packages manager for loading our projects.
     def run_builds!(options = nil)
       options ||= @options
       
@@ -160,8 +163,8 @@ module Helium
       manifest + [PACKAGES, PACKAGES_MIN]
     end
     
-    # Removes any repositories and static files for projects not listed in the the
-    # `deploy.yml` file.
+    # Removes any repositories and static files for projects not listed in the
+    # the `deploy.yml` file.
     def cleanup!
       [repo_dir, static_dir].each do |dir|
         next unless File.directory?(dir)

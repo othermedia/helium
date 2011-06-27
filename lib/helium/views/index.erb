@@ -2,8 +2,8 @@
 
 <p>Helium hosts versioned copies of JavaScript libraries checked out from Git,
 and lets you load objects from these libraries on demand. It uses
-<a href="http://github.com/jcoglan/jake">Jake</a> to build each library and extract
-dependency data, and <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>
+<a href="http://github.com/jcoglan/jake">Jake</a> to build each library and
+extract dependency data, and <a href="http://jsclass.jcoglan.com/packages.html">JS.Packages</a>
 to resolve dependencies and load files at runtime.</p>
 
 <p>To use libraries from this server, drop the following in your <code>HEAD</code>:</p>
@@ -29,9 +29,10 @@ JS.require('GMap2', 'YAHOO.util.Selector', function() {
 });
 &lt;/script></pre>
 
-<p>To set up Helium, you&rsquo;ll need to <a href="/app/config">add projects to deploy</a>
-using YAML format. Each entry should be the name of a project followed by its Git URL.
-Helium relies on JS.Class, for which you need to set a Git URL and a version to use:</p>
+<p>To set up Helium, you&rsquo;ll need to <a href="/app/config">add projects to
+deploy</a> using YAML format. Each entry should be the name of a project
+followed by its Git URL. Helium relies on JS.Class, for which you need to set a
+Git URL and a version to use:</p>
 
 <pre>---
 js.class:
@@ -41,8 +42,9 @@ js.class:
 projects:
   your-library:     git://github.com/your/library.git</pre>
 
-<p>You may also want to <a href="/app/custom">add some custom loaders</a> for libraries
-not deployed using Helium. For example the following are loaders for Google Maps:</p>
+<p>You may also want to <a href="/app/custom">add some custom loaders</a> for
+libraries not deployed using Helium. For example the following are loaders for
+Google Maps:</p>
 
 <pre class="prettyprint">/**
  * Loads the `google.load` function, required to load other

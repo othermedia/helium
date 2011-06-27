@@ -13,8 +13,8 @@ this.require = this.require || JS.require;
  * JavaScript package manifest, generated <%= Time.now %>
  * Requires JS.Class package manager: http://jsclass.jcoglan.com/packages.html
  * 
- * Usage: place the following in the HEAD of your HTML pages,
- * then use the `require()` function to load objects on demand.
+ * Usage: place the following in the HEAD of your HTML pages, then use the
+ * `require()` function to load objects on demand.
  * 
  *     <!-- Step 1. Load JS.Class and the package listing -->
  *     <script type="text/javascript" src="http://<%= @location %>/<%= PACKAGES_MIN %>"></script>
@@ -81,10 +81,10 @@ JS.Packages(function() { with(this) {
      * - project (String)
      * - branch (String)
      * 
-     * Selects a branch to use from a project, and adds the manifest for the given
-     * branch to the JS.Class package registry. This does not load any extra
-     * JavaScript files, it simply tells JS.Class which files to use when that
-     * project's objects are required.
+     * Selects a branch to use from a project, and adds the manifest for the
+     * given branch to the JS.Class package registry. This does not load any
+     * extra JavaScript files, it simply tells JS.Class which files to use when
+     * that project's objects are required.
      * 
      * The Helium.PATH variable *must* be set before calling this function so
      * we can set the full path to the files in the given branch.
