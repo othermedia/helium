@@ -96,7 +96,10 @@ module Helium
         log :export, "Exporting commit '#{ commit }' of '#{ project }' into #{ target }"
         cp_r(repo_dir, target)
         
-        cd(target) { `git checkout #{commit}` }
+        cd(target) do
+          `git reset --hard`
+          `git checkout #{commit}`
+        end
       end
     end
     
