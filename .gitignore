@@ -1,6 +1,5 @@
+Gemfile.lock
 doc
 pkg
-web/lib
-web/public/js
 test/output
 *.gem

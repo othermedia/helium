@@ -1,6 +1,9 @@
+require "rubygems"
+require "bundler/setup"
+
 require "test/unit"
-require "helium"
 require "fileutils"
+require File.expand_path("../../lib/helium", __FILE__)
 
 ROOT = File.dirname(__FILE__)
 
