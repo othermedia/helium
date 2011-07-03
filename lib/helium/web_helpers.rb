@@ -4,12 +4,14 @@ module Helium
     helpers do
       # Returns the data structure contained in the app's deploy.yml file.
       def project_config
-        Helium::Deployer.new(File.dirname(CONFIG)).projects
+        config = File.join(app_directory, CONFIG)
+        Helium::Deployer.new(File.dirname(config)).projects
       end
       
       # Returns the domain and path from which script files are served.
       def get_location
-        location = Helium::Deployer.new(File.dirname(CONFIG)).config['location'] ||
+        config = File.join(app_directory, CONFIG)
+        location = Helium::Deployer.new(File.dirname(config)).config['location'] ||
                    env['HTTP_HOST'] + '/' + Helium::WEB_ROOT
         
         location.gsub(/\/*$/, '')
@@ -27,18 +29,23 @@ module Helium
         allowed_ips.include?(ip)
       end
       
+      def app_directory
+        File.expand_path(Helium::Web.config.app_dir)
+      end
+      
       # Returns +true+ if a lock exists stopping other deploy processes running.
       def locked?
-        File.file?(LOCK)
+        File.file?(File.join(app_directory, LOCK))
       end
       
       # Places a lock in the filesystem while running a code block. This is
       # used to make sure no more than one deploy process runs at once.
       def with_lock(&block)
-        File.open(LOCK, 'w') { |f| f.write(Time.now.to_s) }
-        at_exit { File.delete(LOCK) if File.exists?(LOCK) }
+        lockfile = File.join(app_directory, LOCK)
+        File.open(lockfile, 'w') { |f| f.write(Time.now.to_s) }
+        at_exit { File.delete(lockfile) if File.exists?(lockfile) }
         result = block.call
-        File.delete(LOCK) if File.exists?(LOCK)
+        File.delete(lockfile) if File.exists?(lockfile)
         result
       end
       
@@ -47,7 +54,7 @@ module Helium
         @error    = 'You are not authorized to edit this file' unless allow_write_access?(env)
         @projects = project_config
         @action   = name.to_s
-        @file     = Helium::Web.const_get(name.to_s.upcase)
+        @file     = File.join(app_directory, Helium::Web.const_get(name.to_s.upcase))
         @contents = File.file?(@file) ? File.read(@file) : ''
         erb :edit
       end

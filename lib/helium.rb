@@ -7,7 +7,6 @@ require 'find'
 require 'grit'
 require 'jake'
 require 'packr'
-require 'oyster'
 
 module Helium
   
@@ -37,9 +36,12 @@ module Helium
   
   ERB_TRIM_MODE = '-'
   
-  %w[trie configurable deployer generator logger].each do |file|
-    require File.join(ROOT, 'helium', file)
-  end
+  autoload :Configurable, File.join(ROOT, 'helium', 'configurable')
+  autoload :Deployer,     File.join(ROOT, 'helium', 'deployer')
+  autoload :Generator,    File.join(ROOT, 'helium', 'generator')
+  autoload :Logger,       File.join(ROOT, 'helium', 'logger')
+  autoload :Trie,         File.join(ROOT, 'helium', 'trie')
+  autoload :Web,          File.join(ROOT, 'helium', 'web')
   
   def self.generate(template, dir, options = {})
     Generator.new(template, dir, options).run!

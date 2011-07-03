@@ -4,26 +4,22 @@ require 'yaml'
 
 module Helium
   class Web < Sinatra::Base
-    
-    
-    ROOT_DIR = File.expand_path(File.dirname(__FILE__))
-    require File.join(ROOT_DIR, '..', 'helium')
-    require File.join(ROOT_DIR, 'web_helpers')
-    
     extend Configurable
     
-    LIB_DIR  = 'lib'
+    ROOT_DIR = File.expand_path(File.dirname(__FILE__))
+    require File.join(ROOT_DIR, 'web_helpers')
     
-    CONFIG   = File.join(APP_DIR, 'deploy.yml')
-    CUSTOM   = File.join(APP_DIR, 'custom.js')
-    PUBLIC   = File.join(APP_DIR, 'public', WEB_ROOT)
-    LOCK     = File.join(APP_DIR, '.lock')
+    CONFIG  = 'deploy.yml'
+    CUSTOM  = 'custom.js'
+    LIB_DIR = 'lib'
+    LOCK    = '.lock'
+    PUBLIC  = File.join('public', WEB_ROOT)
     
     set :static, true
-    set :public, File.join(APP_DIR, 'public')
     set :views, File.join(ROOT_DIR, 'views')
     
     before do
+      self.class.set :public, File.join(app_directory, 'public')
       @projects = project_config
       @location = get_location
     end
@@ -48,7 +44,7 @@ module Helium
       halt(200, erb(:deploy)) if @error
       
       with_lock do
-        deployer = Helium::Deployer.new(APP_DIR, LIB_DIR)
+        deployer = Helium::Deployer.new(app_directory, LIB_DIR)
         logger   = Helium::Logger.new
         deployer.add_observer(logger)
         
@@ -59,18 +55,21 @@ module Helium
         
         deployer.cleanup!
         
-        custom = File.file?(CUSTOM) ? File.read(CUSTOM) : nil
+        custom_path = File.join(app_directory, CUSTOM)
+        public_path = File.join(app_directory, PUBLIC)
+        
+        custom = File.file?(custom_path) ? File.read(custom_path) : nil
         files = deployer.run_builds!(:custom => custom, :location => @location)
         
-        FileUtils.rm_rf(PUBLIC) if File.exists?(PUBLIC)
+        FileUtils.rm_rf(public_path) if File.exists?(public_path)
         
         files.each do |path|
-          source, dest = File.join(deployer.static_dir, path), File.join(PUBLIC, path)
+          source, dest = File.join(deployer.static_dir, path), File.join(public_path, path)
           FileUtils.mkdir_p(File.dirname(dest))
           FileUtils.cp(source, dest)
         end
         
-        @log = logger.messages.map { |msg| msg.sub(File.join(APP_DIR, LIB_DIR), '') }
+        @log = logger.messages.map { |msg| msg.sub(File.join(app_directory, LIB_DIR), '') }
         erb :deploy
       end
     end
@@ -80,7 +79,7 @@ module Helium
     ## Save changes to the configuration file, making sure it validates as YAML.
     post '/app/config' do
       @action   = 'config'
-      @file     = CONFIG
+      @file     = File.join(app_directory, CONFIG)
       @contents = params[:contents]
       if allow_write_access?(env)
         begin
@@ -102,7 +101,7 @@ module Helium
     ## Save changes to the custom loaders file.
     post '/app/custom' do
       @action   = 'custom'
-      @file     = CUSTOM
+      @file     = File.join(app_directory, CUSTOM)
       @contents = params[:contents]
       if allow_write_access?(env)
         File.open(@file, 'w') { |f| f.write(@contents) }
