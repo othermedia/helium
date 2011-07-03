@@ -127,44 +127,8 @@ module Helium
         end
         
         next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
-        
-        project, commit = *path.split(SEP)[-2..-1]
-        heads           = YAML.load(File.read(join(path, '..', HEAD_LIST)))
-        branches        = heads.select { |head, id| id == commit }.map { |pair| pair.first }
-        build           = nil
-        
-        if project == JS_CLASS and !branches.include?(@jsclass_version)
-          raise "Unrecognized JS.Class version: #{@jsclass_version}"
-        end
-        
-        Jake.clear_hooks!
-        
-        # Event listener to capture file information from Jake
-        hook = lambda do |_, package, build_type, file|
-          build = _
-          if build_type == :min
-            @js_loader = file if File.basename(file) == LOADER_FILE and
-                                 project == JS_CLASS and
-                                 branches.include?(@jsclass_version)
-            
-            file = file.sub(path, '')
-            manifest << File.join(project, commit, file)
-            
-            branches.each do |branch|
-              @tree[[project, branch]] = commit
-              @tree[[project, branch, file]] = package.meta
-            end
-          end
-        end
-        jake_hook(:file_created, &hook)
-        jake_hook(:file_not_changed, &hook)
-        
-        log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
-        
-        Jake.build!(path) rescue nil
-        manifest += Dir[join(build.build_directory, '**', '*.css')].map { |p| p.gsub(static_dir, '') }
+        run_build_in(path, manifest)
       end
-      
       generate_manifest!
       manifest + [PACKAGES, PACKAGES_MIN]
     end
@@ -195,6 +159,44 @@ module Helium
     end
       
   private
+    
+    def run_build_in(path, manifest)    
+      project, commit = *path.split(SEP)[-2..-1]
+      heads           = YAML.load(File.read(join(path, '..', HEAD_LIST)))
+      branches        = heads.select { |head, id| id == commit }.map { |pair| pair.first }
+      build           = nil
+      
+      if project == JS_CLASS and !heads.keys.include?(@jsclass_version)
+        raise "Unrecognized JS.Class version: #{@jsclass_version}"
+      end
+      
+      Jake.clear_hooks!
+      
+      # Event listener to capture file information from Jake
+      hook = lambda do |_, package, build_type, file|
+        build = _
+        if build_type == :min
+          @js_loader = file if File.basename(file) == LOADER_FILE and
+                               project == JS_CLASS and
+                               branches.include?(@jsclass_version)
+          
+          file = file.sub(path, '')
+          manifest << File.join(project, commit, file)
+          
+          branches.each do |branch|
+            @tree[[project, branch]] = commit
+            @tree[[project, branch, file]] = package.meta
+          end
+        end
+      end
+      jake_hook(:file_created, &hook)
+      jake_hook(:file_not_changed, &hook)
+      
+      log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
+      
+      Jake.build!(path) rescue nil
+      manifest += Dir[join(build.build_directory, '**', '*.css')].map { |p| p.gsub(static_dir, '') }
+    end
     
     # Generates JS.Packages dependency file from ERB template and compresses the result
     def generate_manifest!
