@@ -133,6 +133,10 @@ module Helium
         branches        = heads.select { |head, id| id == commit }.map { |pair| pair.first }
         build           = nil
         
+        if project == JS_CLASS and !branches.include?(@jsclass_version)
+          raise "Unrecognized JS.Class version: #{@jsclass_version}"
+        end
+        
         Jake.clear_hooks!
         
         # Event listener to capture file information from Jake

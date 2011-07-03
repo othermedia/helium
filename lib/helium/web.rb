@@ -59,7 +59,13 @@ module Helium
         public_path = File.join(app_directory, PUBLIC)
         
         custom = File.file?(custom_path) ? File.read(custom_path) : nil
-        files = deployer.run_builds!(:custom => custom, :location => @location)
+        
+        begin
+          files = deployer.run_builds!(:custom => custom, :location => @location)
+        rescue => e
+          @error = e.message
+          halt(200, erb(:deploy))
+        end
         
         FileUtils.rm_rf(public_path) if File.exists?(public_path)
         
