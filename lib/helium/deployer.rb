@@ -129,20 +129,22 @@ module Helium
         next unless File.directory?(path) and File.file?(join(path, JAKE_FILE))
         
         project, commit = *path.split(SEP)[-2..-1]
-        heads = YAML.load(File.read(join(path, '..', HEAD_LIST)))
-        branches = heads.select { |head, id| id == commit }.map { |pair| pair.first }
+        heads           = YAML.load(File.read(join(path, '..', HEAD_LIST)))
+        branches        = heads.select { |head, id| id == commit }.map { |pair| pair.first }
+        build           = nil
         
         Jake.clear_hooks!
         
         # Event listener to capture file information from Jake
-        hook = lambda do |build, package, build_type, file|
+        hook = lambda do |_, package, build_type, file|
+          build = _
           if build_type == :min
             @js_loader = file if File.basename(file) == LOADER_FILE and
                                  project == JS_CLASS and
                                  branches.include?(@jsclass_version)
             
             file = file.sub(path, '')
-            manifest << join(project, commit, file)
+            manifest << File.join(project, commit, file)
             
             branches.each do |branch|
               @tree[[project, branch]] = commit
@@ -155,8 +157,8 @@ module Helium
         
         log :jake_build, "Building branch '#{ branches * "', '" }' of '#{ project }' from #{ join(path, JAKE_FILE) }"
         
-        begin; Jake.build!(path)
-        rescue; end
+        Jake.build!(path) rescue nil
+        manifest += Dir[join(build.build_directory, '**', '*.css')].map { |p| p.gsub(static_dir, '') }
       end
       
       generate_manifest!
@@ -238,7 +240,7 @@ module Helium
     
     def `(command)
       puts command
-      system(command)
+      super
     end
     
   end
