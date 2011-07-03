@@ -57,7 +57,7 @@ If you've checked Helium out from Git, use Bundler to install its dependencies:
 
 == Installation
 
-To install from Rubygems:
+To install from RubyGems:
 
   gem install helium
 

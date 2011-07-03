@@ -1,14 +1,13 @@
 === 0.2.0 / 2011-06-27
 
+* Deploy CSS files from project build directories to Helium's public directory
 * Include a skeleton JS.Test setup for browser and command-line in project template
 * Make sure file permission changes don't stop `git checkout` working
 * Print an error message when an unrecognised project name is POSTed to the
   deployer rather than crashing
 * Don't follow symlinks when discovering projects to build
 * Make the deployer pick out branches correctly
-* Update website copy
-* Don't "require 'rubygems'" directly
-* Remove dependency on Hoe, use Bundler for dependencies
+* Change config.ru format
 
 
 === 0.1.2 / 2010-03-09
