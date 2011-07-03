@@ -65,6 +65,7 @@ module Helium
         
         files.each do |path|
           source, dest = File.join(deployer.static_dir, path), File.join(public_path, path)
+          next unless File.file?(source)
           FileUtils.mkdir_p(File.dirname(dest))
           FileUtils.cp(source, dest)
         end
