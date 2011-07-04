@@ -44,9 +44,9 @@ module Helium
         lockfile = File.join(app_directory, LOCK)
         File.open(lockfile, 'w') { |f| f.write(Time.now.to_s) }
         at_exit { File.delete(lockfile) if File.exists?(lockfile) }
-        result = block.call
+        block.call
+      ensure
         File.delete(lockfile) if File.exists?(lockfile)
-        result
       end
       
       # Generic handler for displaying editable files requested using GET.
